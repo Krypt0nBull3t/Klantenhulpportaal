@@ -1,6 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router';
+import { ticketsRoutes } from '../domains/Tickets/routes';
 
-export const router = createRouter({
+const router = createRouter({
     history: createWebHistory(),
-    routes: [],
+    routes: [
+        ...ticketsRoutes
+    ],
 });
+
+export default router;
