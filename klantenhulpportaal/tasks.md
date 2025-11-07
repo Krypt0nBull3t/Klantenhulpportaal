@@ -59,13 +59,14 @@
 
 
 ### Frontend
-- Create registration page UI
-- Connect registration form to backend
+- ✅ Create a landing page.
 - Create login page UI
 - Connect login form to backend
 - Implement logout functionality
 - Create password recovery page UI
 - Connect password recovery form to backend
+- Create registration page UI
+- Connect registration form to backend
 - Show confirmation messages and errors in UI
 
 

@@ -18,17 +18,17 @@ This is a Customer Support Portal, built with Laravel (backend) and Vue 3 + Type
 - **categories:** id, name, created_at, updated_at
 
 ## Developer Workflows
-- **Start development:** `composer run dev` (runs PHP server, queue, logs, Vite dev server)
-- **Build frontend:** `npm run build`
-- **Run backend tests:** `composer test` or `php artisan test`
-- **Migrate database:** `php artisan migrate` (create migrations in `database/migrations/`)
-- **Seed database:** `php artisan db:seed` (create seeders in `database/seeders/`)
-- **Create factories:** Use `php artisan make:factory` for test data in `database/factories/`
-- **Create models:** Use `php artisan make:model` for Eloquent models in `app/Models/`
-- **Create controllers:** Use `php artisan make:controller` for logic in `app/Http/Controllers/`
-- **Create requests:** Use `php artisan make:request` for validation in `app/Http/Requests/`
-- **Create resources:** Use `php artisan make:resource` for API responses in `app/Http/Resources/`
-- **Environment setup:** Copy `.env.example` to `.env` and configure as needed
+
+## Test-Driven Development (TDD) Workflow
+When implementing features using TDD, always follow this strict order:
+
+1. **Write the test for the new feature.**
+2. **Run the test to confirm it fails (red phase).**
+3. **Write the minimal code to make the test pass.**
+4. **Run the test to confirm it passes (green phase).**
+5. **Refactor the code as needed, ensuring all tests still pass.**
+
+Never skip the initial failing test step before writing implementation code. This ensures the TDD cycle is followed correctly and the test truly drives the development process.
 
 ## Conventions & Patterns
 - **Models:** Eloquent models in `app/Models/`, factories in `database/factories/`
@@ -80,6 +80,14 @@ This is a Customer Support Portal, built with Laravel (backend) and Vue 3 + Type
 **Key Rule:** Use JSDoc-style comments for all generated code, including PHP, to ensure consistent and clear documentation for classes, methods, parameters, and return values.
 
 # Coding Key Rules
+**Key Rule:** Always use modular route arrays for each domain (e.g., landingRoutes, ticketsRoutes) in Vue Router. Import and spread these arrays in the main router to keep routing organized, maintainable, and consistent with project conventions.
+**Key Rule:** When writing tests:
+  - Use the AAA (Arrange, Act, Assert) pattern for clarity and maintainability.
+  - Prefer Vitest globals (`describe`, `it`, `expect`) and remove unnecessary imports when enabled.
+  - Structure tests to be concise, readable, and focused on user-facing behavior.
+  - Ensure the correct testing library (e.g., `@testing-library/vue` for Vue components) is installed and used.
+  - Keep test files clean and idiomatic for maintainability.
+  - Remove redundant or obsolete tests promptly.
 **Key Rule:** Prefer including only direct fields in API resources and let the frontend fetch related data as needed, unless related data is always required for the view.
 - Always use TypeScript for Vue components and services (prefer `const`/`let`, arrow functions)
 - Separate logic: API calls in `services/`, types in `/types`, components in `/components`

@@ -18,7 +18,7 @@
     "isolatedModules": true,
     "noEmitOnError": true,
     "jsx": "preserve",
-    "types": ["vite/client"],
+    "types": ["vite/client", "vitest/globals"],
     "paths": {
       "@/*": ["./resources/js/*"]
     }
@@ -26,7 +26,9 @@
   "include": [
     "resources/js/**/*.ts",
     "resources/js/**/*.tsx",
-    "resources/js/**/*.vue"
+    "resources/js/**/*.vue",
+    "src/**/*",
+    "tests/**/*"
   ],
   "exclude": [
     "node_modules",
