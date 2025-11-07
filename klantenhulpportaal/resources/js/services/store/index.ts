@@ -1,54 +1,76 @@
-import { ref, computed } from 'vue';
-import { getRequest, postRequest, putRequest, deleteRequest } from '../http';
+import type {New, State, Updatable} from './types';
 
-export type New<T extends {id: number}> = Omit<T, 'id'>;
+import {computed, ref} from 'vue';
 
-export const storeModuleFactory = <T extends { id: number }>(moduleName:string) => {
-    const state = ref<Record<number, T>>({});
+import {deleteRequest, getRequest, postRequest, putRequest} from '../http';
+
+/**
+ * Creates a store module for the given module name.
+ */
+// eslint-disable-next-line max-lines-per-function
+export const storeModuleFactory = <T extends {id: number}>(moduleName: string) => {
+    const state: State<T> = ref({});
 
     const getters = {
-        all: computed(() => state.value),
-        getById: (id : number) => computed(() => state.value[id])
+        /** Get all items from the store */
+        all: computed(() => Object.values(state.value)),
+        /**
+         * Get an item from the state by id
+         */
+        byId: (id: number) => computed(() => state.value[id]),
     };
 
     const setters = {
+        /**
+         * Set items in the state.
+         */
         setAll: (items: T[]) => {
             for (const item of items) state.value[item.id] = Object.freeze(item);
         },
-
-        deleteByItem: (id: number) => {
+        /**
+         * Set one specific item in the storage
+         */
+        setById: (item: T) => {
+            state.value[item.id] = Object.freeze(item);
+        },
+        /**
+         * Delete one specific item in the storage by id
+         */
+        deleteById: (id: number) => {
             delete state.value[id];
-        }
+        },
     };
 
     const actions = {
         getAll: async () => {
-            const { data } = await getRequest(moduleName);
+            const {data} = await getRequest(moduleName);
             if (!data) return;
             setters.setAll(data);
         },
-
-        create: async (item: New<T>) => {
-            const { data } = await postRequest(moduleName, item);
+        getById: async (id: number) => {
+            const {data} = await getRequest(`${moduleName}/${id}`);
             if (!data) return;
-            setters.setAll(data);
+            setters.setById(data);
         },
-
-        update: async (id: number, item: T) => {
-            const { data } = await putRequest(`${moduleName}/${id}`, item);
+        create: async (newItem: New<T>) => {
+            const {data} = await postRequest(moduleName, newItem);
             if (!data) return;
-            setters.setAll(data);
+            setters.setById(data);
         },
-
+        update: async (id: number, item: Updatable<T>) => {
+            const {data} = await putRequest(`${moduleName}/${id}`, item);
+            if (!data) return;
+            setters.setById(data);
+        },
         delete: async (id: number) => {
-            const response = await deleteRequest(`${moduleName}/${id}`);
-            if (response && (!response.data || !response.data.message)) {
-                setters.deleteByItem(id);
-            }
-            return response;
-        }
-        
+            await deleteRequest(`${moduleName}/${id}`);
+            setters.deleteById(id);
+        },
     };
 
-    return { getters, setters, actions };
+    return {
+        getters,
+        setters,
+        actions,
+    };
 };

@@ -22,7 +22,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'role',
+        'is_admin',
     ];
 
     /**
@@ -61,12 +61,12 @@ class User extends Authenticatable
 
     public function ticketReplies()
     {
-        return $this->hasMany(TicketReply::class, 'user_id');
+    return $this->hasMany(Reply::class, 'user_id');
     }
 
-    public function ticketNotes()
+    public function notes()
     {
-        return $this->hasMany(TicketNote::class, 'admin_id');
+        return $this->hasMany(Note::class, 'admin_id');
     }
 
 }

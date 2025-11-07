@@ -21,23 +21,23 @@
 - Create Form Request for tickets (validation)
 - Create API Resource for tickets
 
-### Ticket Replies Entity
-- ✅ Create migration for ticket_replies table
-- Create seeder for ticket_replies
-- Create factory for ticket_replies
-- Create Eloquent model for ticket_replies
-- Create controller for ticket_replies
-- Create Form Request for ticket_replies (validation)
-- Create API Resource for ticket_replies
+### Replies Entity
+- ✅ Create migration for replies table
+- Create seeder for replies
+- Create factory for replies
+- Create Eloquent model for replies
+- Create controller for replies
+- Create Form Request for replies (validation)
+- Create API Resource for replies
 
-### Ticket Notes Entity
-- ✅ Create migration for ticket_notes table
-- Create seeder for ticket_notes
-- Create factory for ticket_notes
-- Create Eloquent model for ticket_notes
-- Create controller for ticket_notes
-- Create Form Request for ticket_notes (validation)
-- Create API Resource for ticket_notes
+### Notes Entity
+- ✅ Create migration for notes table
+- Create seeder for notes
+- Create factory for notes
+- Create Eloquent model for notes
+- Create controller for notes
+- Create Form Request for notes (validation)
+- Create API Resource for notes
 
 ### Categories Entity
 - ✅ Create migration for categories table

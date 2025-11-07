@@ -11,7 +11,7 @@ class Ticket extends Model
 
     protected $fillable = [
         'title',
-        'description',
+        'content',
         'status',
         'user_id',
         'assigned_to',
@@ -37,12 +37,12 @@ class Ticket extends Model
 
     public function notes()
     {
-        return $this->hasMany(TicketNote::class);
+    return $this->hasMany(Note::class);
     }
 
     public function replies()
     {
-        return $this->hasMany(TicketReply::class);
+    return $this->hasMany(Reply::class);
     }
 
 }

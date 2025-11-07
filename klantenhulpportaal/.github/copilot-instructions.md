@@ -11,11 +11,11 @@ This is a Customer Support Portal, built with Laravel (backend) and Vue 3 + Type
 - **Database:** MySQL (configure in `.env`), see ERD below for relationships. Migrations in `database/migrations/`, seeders/factories in `database/seeders/` and `database/factories/`.
 
 ## Database Structure (see ERD)
-- **users:** id, name, email, password, role (user/admin), timestamps
-- **tickets:** id, title, description, status (enum), user_id, assigned_to, category_id, timestamps
-- **ticket_replies:** id, ticket_id, user_id, message, timestamps
-- **ticket_notes:** id, ticket_id, admin_id, note, timestamps
-- **categories:** id, name, description, timestamps
+- **users:** id, name, email, password, is_admin (boolean), email_verified_at, created_at, updated_at
+- **tickets:** id, title, content, status (int), user_id, assigned_to, category_id, created_at, updated_at
+- **replies:** id, ticket_id, user_id, content, created_at, updated_at
+- **notes:** id, ticket_id, admin_id, content, created_at, updated_at
+- **categories:** id, name, created_at, updated_at
 
 ## Developer Workflows
 - **Start development:** `composer run dev` (runs PHP server, queue, logs, Vite dev server)

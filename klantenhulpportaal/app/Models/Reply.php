@@ -5,25 +5,24 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class TicketNote extends Model
+class Reply extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'ticket_id',
-        'admin_id',
-        'note',
+        'user_id',
+        'content',
     ];
 
     // Relations
-
     public function ticket()
     {
         return $this->belongsTo(Ticket::class);
     }
 
-    public function admin()
+    public function author()
     {
-        return $this->belongsTo(User::class, 'admin_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 }
