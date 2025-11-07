@@ -3,6 +3,8 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use app\Models\User;
+use app\Models\Category;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Ticket>
@@ -20,9 +22,9 @@ class TicketFactory extends Factory
             'title' => fake()->sentence(),
             'description' => fake()->paragraph(),
             'status' => fake()->randomElement(['In afwachting', 'In behandeling', 'Afgehandeld']),
-            'user_id' => \App\Models\User::factory(),
+            'user_id' => User::factory(),
             'assigned_to' => null,
-            'category_id' => \App\Models\Category::factory(),
+            'category_id' => Category::factory(),
         ];
     }
 }

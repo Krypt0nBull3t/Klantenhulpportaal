@@ -3,6 +3,8 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use app\Models\User;
+use app\Models\Ticket;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\TicketReply>
@@ -17,8 +19,8 @@ class TicketReplyFactory extends Factory
     public function definition(): array
     {
         return [
-            'ticket_id' => \App\Models\Ticket::factory(),
-            'user_id' => \App\Models\User::factory(),
+            'ticket_id' => Ticket::factory(),
+            'user_id' => User::factory(),
             'message' => fake()->paragraph(),
         ];
     }
