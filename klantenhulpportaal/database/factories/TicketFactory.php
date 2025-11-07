@@ -18,13 +18,16 @@ class TicketFactory extends Factory
      */
     public function definition(): array
     {
-        return [
-            'title' => fake()->sentence(),
-            'content' => fake()->paragraph(),
-            'status' => fake()->numberBetween(0, 2),
-            'user_id' => User::inRandomOrder()->first()->id,
-            'assigned_to' => null,
-            'category_id' => Category::inRandomOrder()->first()->id,
-        ];
+            $admin = User::where('is_admin', true)->inRandomOrder()->first();
+            $assignedTo = fake()->boolean(70) && $admin ? $admin->id : null; // ~70% assigned, 30% unassigned
+
+            return [
+                'title' => fake()->sentence(),
+                'content' => fake()->paragraph(),
+                'status' => fake()->numberBetween(0, 2),
+                'user_id' => User::inRandomOrder()->first()->id,
+                'assigned_to' => $assignedTo,
+                'category_id' => Category::inRandomOrder()->first()->id,
+            ];
     }
 }
