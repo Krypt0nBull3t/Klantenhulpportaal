@@ -75,7 +75,12 @@ This is a Customer Support Portal, built with Laravel (backend) and Vue 3 + Type
 - Users receive a confirmation email upon registration
 - Users are notified of responses to their tickets
 
+**Key Rule:** Before implementing any code or making changes to the workspace, always provide the code and explanation for user review and approval.
+**Key Rule:** Always update tasks.md immediately after completing and implementing an approved task to keep project progress visible and accurate.
+**Key Rule:** Use JSDoc-style comments for all generated code, including PHP, to ensure consistent and clear documentation for classes, methods, parameters, and return values.
+
 # Coding Key Rules
+**Key Rule:** Prefer including only direct fields in API resources and let the frontend fetch related data as needed, unless related data is always required for the view.
 - Always use TypeScript for Vue components and services (prefer `const`/`let`, arrow functions)
 - Separate logic: API calls in `services/`, types in `/types`, components in `/components`
 - Implement error handling on all Axios requests. Use Axios interceptors and a central error bag/message (`services/error` and `services/http`) for frontend error handling. Catch validation and server errors in the error bag/message and show these in the UI.

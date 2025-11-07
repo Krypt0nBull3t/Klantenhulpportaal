@@ -5,48 +5,53 @@
 ## Database Setup (Start Here)
 ### Users Entity
 - ✅ Create migration for users table
-- Create seeder for users
-- Create factory for users
-- Create Eloquent model for users
-- Create controller for users
-- Create Form Request for users (validation)
-- Create API Resource for users
+- ✅ Create seeder for users
+- ✅ Create factory for users
+- ✅ Create Eloquent model for users
+- ✅ Create StoreUserRequest for user registration
+- ✅ Create UpdateUserRequest for user profile update
+- ✅ Create API Resource for users
+- ✅ Create controller for users
 
 ### Tickets Entity
 - ✅ Create migration for tickets table
-- Create seeder for tickets
-- Create factory for tickets
-- Create Eloquent model for tickets
-- Create controller for tickets
-- Create Form Request for tickets (validation)
-- Create API Resource for tickets
+- ✅ Create seeder for tickets
+- ✅ Create factory for tickets
+- ✅ Create Eloquent model for tickets
+- ✅ Create StoreTicketRequest for ticket creation
+- ✅ Create UpdateTicketRequest for ticket update
+- ✅ Create API Resource for tickets
+- ✅ Create controller for tickets
 
 ### Replies Entity
 - ✅ Create migration for replies table
-- Create seeder for replies
-- Create factory for replies
-- Create Eloquent model for replies
-- Create controller for replies
-- Create Form Request for replies (validation)
-- Create API Resource for replies
+- ✅ Create seeder for replies
+- ✅ Create factory for replies
+- ✅ Create Eloquent model for replies
+- ✅ Create StoreReplyRequest for reply creation
+- ✅ Create UpdateReplyRequest for reply update
+- ✅ Create API Resource for replies
+- ✅ Create controller for replies
 
 ### Notes Entity
 - ✅ Create migration for notes table
 - Create seeder for notes
-- Create factory for notes
-- Create Eloquent model for notes
-- Create controller for notes
-- Create Form Request for notes (validation)
+- ✅ Create factory for notes
+- ✅ Create Eloquent model for notes
+- Create StoreNoteRequest for note creation
+- Create UpdateNoteRequest for note update
 - Create API Resource for notes
+- Create controller for notes
 
 ### Categories Entity
 - ✅ Create migration for categories table
 - Create seeder for categories
-- Create factory for categories
-- Create Eloquent model for categories
-- Create controller for categories
-- Create Form Request for categories (validation)
+- ✅ Create factory for categories
+- ✅ Create Eloquent model for categories
+- Create StoreCategoryRequest for category creation
+- Create UpdateCategoryRequest for category update
 - Create API Resource for categories
+- Create controller for categories
 
 ---
 
@@ -225,6 +230,14 @@
 
 ### Styling
 - Style user management pages and forms
+
+---
+## Administrator User Management
+- Create initial administrator user via seeder or migration
+- Create protected endpoint for admin promotion
+- Create MakeAdminRequest for admin promotion validation
+- Implement controller logic for admin promotion (admin-only)
+- Write tests for admin promotion endpoint and logic
 
 ---
 ## Routing & Guards

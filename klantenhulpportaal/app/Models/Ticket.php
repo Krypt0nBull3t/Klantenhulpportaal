@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class Ticket extends Model
 {
@@ -40,9 +40,14 @@ class Ticket extends Model
     return $this->hasMany(Note::class);
     }
 
+    /**
+     * Get the replies for the ticket.
+     * @function replies
+     * @returns \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function replies()
     {
-    return $this->hasMany(Reply::class);
+        return $this->hasMany(Reply::class);
     }
 
 }
