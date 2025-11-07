@@ -12,7 +12,9 @@ class ReplyFactory extends Factory
     public function definition(): array
     {
         return [
-            'content' => $this->faker->paragraph(),
+            'ticket_id' => \App\Models\Ticket::inRandomOrder()->first()->id ?? \App\Models\Ticket::factory(),
+            'user_id'   => \App\Models\User::inRandomOrder()->first()->id ?? \App\Models\User::factory(),
+            'content'   => fake()->paragraph(),
         ];
     }
 }

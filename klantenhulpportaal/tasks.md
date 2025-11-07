@@ -35,23 +35,23 @@
 
 ### Notes Entity
 - ✅ Create migration for notes table
-- Create seeder for notes
+- ✅ Create seeder for notes
 - ✅ Create factory for notes
 - ✅ Create Eloquent model for notes
-- Create StoreNoteRequest for note creation
-- Create UpdateNoteRequest for note update
-- Create API Resource for notes
-- Create controller for notes
+- ✅ Create StoreNoteRequest for note creation
+- ✅ Create UpdateNoteRequest for note update
+- ✅ Create API Resource for notes
+- ✅ Create controller for notes
 
 ### Categories Entity
 - ✅ Create migration for categories table
-- Create seeder for categories
+- ✅ Create seeder for categories
 - ✅ Create factory for categories
 - ✅ Create Eloquent model for categories
-- Create StoreCategoryRequest for category creation
-- Create UpdateCategoryRequest for category update
-- Create API Resource for categories
-- Create controller for categories
+- ✅ Create StoreCategoryRequest for category creation
+- ✅ Create UpdateCategoryRequest for category update
+- ✅ Create API Resource for categories
+- ✅ Create controller for categories
 
 ---
 

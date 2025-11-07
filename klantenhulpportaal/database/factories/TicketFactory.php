@@ -20,11 +20,11 @@ class TicketFactory extends Factory
     {
         return [
             'title' => fake()->sentence(),
-            'description' => fake()->paragraph(),
-            'status' => fake()->randomElement(['In afwachting', 'In behandeling', 'Afgehandeld']),
-            'user_id' => User::factory(),
+            'content' => fake()->paragraph(),
+            'status' => fake()->numberBetween(0, 2),
+            'user_id' => User::inRandomOrder()->first()->id,
             'assigned_to' => null,
-            'category_id' => Category::factory(),
+            'category_id' => Category::inRandomOrder()->first()->id,
         ];
     }
 }
