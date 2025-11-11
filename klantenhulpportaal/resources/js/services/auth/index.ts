@@ -9,6 +9,13 @@ interface LoginCredentials {
     password: string;
 }
 
+interface RegistrationData {
+    name: string;
+    email: string;
+    password: string;
+    password_confirmation: string;
+}
+
 export const login = async (credentials: LoginCredentials) => {
     const { data } = await postRequest('/login', credentials);
     if (!data) return;
@@ -26,6 +33,11 @@ export async function fetchUser() {
     if (!data) return;
     user.value = data as User;
     return { data };
+}
+
+export async function register(data: RegistrationData) {
+    const response = await postRequest('/register', data);
+    return response;
 }
 
 export async function checkAuth(): Promise<boolean> {

@@ -50,6 +50,11 @@
           </button>
         </div>
       </form>
+      <div class="mt-4 text-center">
+        <router-link to="/register" class="text-blue-600 hover:underline" role="link" data-test="login-register-link">
+          Nog geen account? Registreer
+        </router-link>
+      </div>
     </div>
   </div>
 </template>
@@ -59,7 +64,7 @@ import { ref } from 'vue';
 import { login } from '../../../services/auth';
 import ErrorMessage from '../../../components/ErrorMessage.vue';
 import FormError from '../../../components/FormError.vue';
-import router from '@/router';
+import router from '../../../router';
 
 const credentials = ref({
   email: '',

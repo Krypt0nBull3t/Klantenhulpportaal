@@ -8,7 +8,12 @@ Route::middleware('web')->group(function () {
     Route::post('/login', [AuthController::class, 'login']);
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/password/email', [AuthController::class, 'sendPasswordResetLink']);
+    Route::post('/register', [AuthController::class, 'register']);
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
+
+    // Email verification routes
+    Route::get('/email/verify/{id}/{hash}', [AuthController::class, 'verify'])->name('verification.verify');
+    Route::post('/email/resend', [AuthController::class, 'resendVerification'])->name('verification.resend');
 });

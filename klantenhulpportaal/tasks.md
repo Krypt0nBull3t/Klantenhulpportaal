@@ -71,21 +71,21 @@
 - ✅ Implement logout endpoint
 - ✅ Implement password recovery endpoint
 - ✅ Implement backend validation for password recovery using Laravel Form Request
-- Implement user registration endpoint
-- Implement backend validation for registration using Laravel Form Request
-- Implement email confirmation for registration
-- Write tests for registration endpoint
-- Write tests for email confirmation
+- ✅ Implement user registration endpoint
+- ✅ Implement backend validation for registration using Laravel Form Request
+- ✅ Implement email confirmation for registration
+- ✅ Write tests for registration endpoint
+- ✅ Write tests for email confirmation
 - ✅ Write tests for login endpoint
-- Write tests for logout endpoint
-- Write tests for password recovery endpoint
+- ✅ Write tests for logout endpoint
+- ✅ Write tests for password recovery endpoint
 
 ### Frontend Authentication
 - ✅ Create a landing page
 - ✅ Create login page UI
 - ✅ Connect login form to backend
-- Create registration page UI
-- Connect registration form to backend
+- ✅ Create registration page UI
+- ✅ Connect registration form to backend
 - Create password recovery page UI
 - Connect password recovery form to backend
 - Implement logout functionality

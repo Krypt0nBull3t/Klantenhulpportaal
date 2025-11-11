@@ -3,6 +3,7 @@ import { mount, flushPromises } from '@vue/test-utils';
 import { vi } from 'vitest';
 import LoginPage from '../../resources/js/domains/Auth/pages/LoginPage.vue';
 import { setMessage, setErrorBag, destroyMessage, destroyErrors } from '../../resources/js/services/error';
+import { createRouter, createWebHistory } from 'vue-router';
 
 // Mock the auth service
 vi.mock('../../resources/js/services/auth', () => ({
@@ -104,5 +105,24 @@ describe('LoginPage UI', () => {
     // Assert
     expect(passwordErrors.length).toBeGreaterThan(0);
     expect(passwordErrors[0].text()).toContain('Password is too short');
+  });
+
+  it('shows a Register link that routes to /register', async () => {
+    // Arrange
+    const router = createRouter({
+      history: createWebHistory(),
+      routes: [
+        { path: '/login', component: LoginPage },
+        { path: '/register', component: { template: '<div>Register</div>' } }
+      ]
+    });
+    const wrapper = mount(LoginPage, { global: { plugins: [router] } });
+
+  // Act
+  const registerLink = wrapper.findComponent({ name: 'RouterLink' });
+
+  // Assert
+  expect(registerLink.exists()).toBe(true);
+  expect(registerLink.props('to')).toBe('/register');
   });
 });
