@@ -1,110 +1,96 @@
 # Copilot Instructions for Klantenhulpportaal
 
-## Project Overview
-This is a Customer Support Portal, built with Laravel (backend) and Vue 3 + TypeScript (frontend). The goal is to provide a robust, efficient, and user-friendly system for managing customer support tickets, with secure authentication and realistic seeded data for development.
+## 🎯 Project Overview
+**Customer Support Portal**: Laravel backend + Vue 3 TypeScript SPA
+- **Goal**: Robust ticket management system with secure authentication
+- **Stack**: Laravel 12, Vue 3, TypeScript, Tailwind CSS, Laravel Sanctum
+- **Development**: TDD approach with Vitest, phase-based task completion
 
-## Architecture & Data Flow
-- **Backend:** Laravel 12, Eloquent ORM, Sanctum for authentication.
-- **Frontend:** Vue 3 SPA, TypeScript, Vue Router, Axios façade for API calls, Tailwind CSS for styling.
-- **State Management:** Store factory pattern in `resources/js/services/store/`.
-- **Routing:** Client-side via Vue Router (`resources/js/router/`), backend via Laravel routes (`routes/api.php`, `routes/web.php`).
-- **Database:** MySQL (configure in `.env`), see ERD below for relationships. Migrations in `database/migrations/`, seeders/factories in `database/seeders/` and `database/factories/`.
+## 🏗️ Architecture
+### Tech Stack
+- **Backend**: Laravel 12 + Eloquent + Sanctum authentication
+- **Frontend**: Vue 3 SPA + TypeScript + Vue Router + Axios + Tailwind CSS
+- **Database**: MySQL with migrations, seeders, and factories
+- **Testing**: Vitest + Vue Test Utils + Laravel tests
 
-## Database Structure (see ERD)
-- **users:** id, name, email, password, is_admin (boolean), email_verified_at, created_at, updated_at
-- **tickets:** id, title, content, status (int), user_id, assigned_to, category_id, created_at, updated_at
-- **replies:** id, ticket_id, user_id, content, created_at, updated_at
-- **notes:** id, ticket_id, admin_id, content, created_at, updated_at
-- **categories:** id, name, created_at, updated_at
+### Key Directories
+```
+app/Models/               # Eloquent models
+app/Http/Controllers/     # API controllers
+resources/js/domains/     # Vue components by domain
+resources/js/services/    # API calls, error handling, state
+routes/api.php           # Backend API routes  
+resources/js/router/     # Frontend routing
+database/migrations/     # Database schema
+tests/                   # Frontend/backend tests
+```
 
-## Developer Workflows
+## 📋 Database Schema
+- **users**: id, name, email, password, is_admin, email_verified_at
+- **categories**: id, name
+- **tickets**: id, title, content, status, user_id, assigned_to, category_id
+- **replies**: id, ticket_id, user_id, content
+- **notes**: id, ticket_id, admin_id, content (admin-only)
 
-## Test-Driven Development (TDD) Workflow
-When implementing features using TDD, always follow this strict order:
+## 🔧 Development Rules
 
-1. **Write the test for the new feature.**
-2. **Run the test to confirm it fails (red phase).**
-3. **Write the minimal code to make the test pass.**
-4. **Run the test to confirm it passes (green phase).**
-5. **Refactor the code as needed, ensuring all tests still pass.**
+### 📋 Project Management
+- **KEY RULE**: Before implementing any code or making changes to the workspace, always provide the code and explanation for user review and approval
+- **KEY RULE**: Always update tasks.md immediately after completing and implementing an approved task to keep project progress visible and accurate
+- **KEY RULE**: Use JSDoc-style comments for all generated code, including PHP, to ensure consistent and clear documentation for classes, methods, parameters, and return values
+- **KEY RULE**: Phase-Based Development - Follow the logical dependency order in tasks.md:
+  - Complete ALL foundation tasks (database, infrastructure, authentication) before building dependent features
+  - Never start a phase that depends on incomplete previous phases
+  - Verify infrastructure (Sanctum, error handling, routing) is working before building features that depend on it
+  - Backend endpoints should be implemented and tested before connecting frontend components to them
 
-Never skip the initial failing test step before writing implementation code. This ensures the TDD cycle is followed correctly and the test truly drives the development process.
+### 🧪 Testing Strategy (TDD)
+- **KEY RULE**: When writing tests:
+  - Add `data-test` attributes to all relevant elements in components and reference them in tests to ensure robust and maintainable test targeting
+  - Exclusively use the Vitest library for all frontend tests in this project. Use PHPUnit for backend tests only.
+  - **CRITICAL**: Use `mount` instead of `shallowMount` when testing components that depend on child components with reactive state (e.g., ErrorMessage, FormError components that use composables). Use `shallowMount` only for pure component logic testing without child dependencies
+  - Set global state (error messages, user state) BEFORE mounting components in tests to ensure predictable behavior
+  - Always use `flushPromises()` after state changes in async tests to ensure Vue reactivity updates are processed
+  - Use the AAA (Arrange, Act, Assert) pattern for clarity and maintainability
+  - Prefer Vitest globals (`describe`, `it`, `expect`) and remove unnecessary imports when enabled
+  - Structure tests to be concise, readable, and focused on user-facing behavior
+  - Keep test files clean and idiomatic for maintainability
+  - Remove redundant or obsolete tests promptly
+- **TDD Cycle**: Write failing test → implement minimal code → refactor (ensure tests pass)
+- **Coverage**: Write at least one test per feature, cover edge cases and error conditions
+- **Independence**: Keep tests isolated, avoid dependencies between tests
+- **Maintenance**: Run full test suite after changes, remove/update obsolete tests
 
-## Conventions & Patterns
-- **Models:** Eloquent models in `app/Models/`, factories in `database/factories/`
-- **Controllers:** HTTP controllers in `app/Http/Controllers/`
-- **Frontend domains:** Vue components/pages by domain in `resources/js/domains/`
-- **API communication:** Use Axios façade in `resources/js/services/http/`
-- **Authentication:** Laravel Sanctum for API auth
-- **Routing:**
-  - Backend: `routes/api.php` (API), `routes/web.php` (web)
-  - Frontend: `resources/js/router/index.ts`
-- **TypeScript:** All new frontend code should use TypeScript
-- **Styling:** Use Tailwind CSS; custom CSS only if necessary
+### 🎨 Frontend Standards  
+- **KEY RULE**: Always use modular route arrays for each domain (e.g., landingRoutes, ticketsRoutes) in Vue Router. Import and spread these arrays in the main router to keep routing organized, maintainable, and consistent with project conventions
+- **KEY RULE**: Prefer including only direct fields in API resources and let the frontend fetch related data as needed, unless related data is always required for the view
+- **TypeScript**: All Vue components and services (prefer `const`/`let`, arrow functions)
+- **Imports**: Use `use` statements, remove unnecessary imports (e.g., `defineEmits`)
+- **Architecture**: Separate API calls (`services/`), types (`/types`), components (`/components`)
+- **Error Handling**: Central error bag + Axios interceptors, never use `try/catch` or `.then/.catch`, always `async/await`
+- **Routing**: Use Vue Router guards for protected routes
+- **Accessibility**: `aria-label` on all interactive elements
+- **Styling**: Use Tailwind CSS, custom CSS only if necessary
 
-## Example: Adding a Ticket Feature
-1. Backend: Add model (`app/Models/Ticket.php`), migration, controller
-2. Frontend: Add page/component (`resources/js/domains/Tickets/pages/`), update routes (`resources/js/domains/Tickets/routes.ts`)
-3. API: Define endpoint in `routes/api.php`
+### 🔐 Laravel Sanctum SPA
+- **Environment**: Configure `SANCTUM_STATEFUL_DOMAINS` in `.env`
+- **Middleware**: Add `EnsureFrontendRequestsAreStateful` to API routes  
+- **Model**: Use `HasApiTokens` trait on User model
+- **Verification**: Ensure `/sanctum/csrf-cookie` endpoint works
 
-## Integration Points
-- **API:** Frontend communicates with backend via REST endpoints
-- **Auth:** Sanctum for secure user management
-- **Queue:** Laravel queue for background jobs
+### 🏛️ Backend Standards
+- **Models**: Eloquent models in `app/Models/`, with factories in `database/factories/`
+- **Controllers**: HTTP controllers in `app/Http/Controllers/`
+- **Validation**: Use Laravel Form Requests for all API validation
+- **Resources**: Create API Resources for structured responses
+- **Authentication**: Laravel Sanctum for API auth
+- **Routes**: Backend routes in `routes/api.php` and `routes/web.php`
 
-
-## Features
-- User authentication (login, logout, password recovery)
-- User registration with confirmation email
-- Ticket overview for users and administrators
-- Ticket creation and modification
-- Ticket assignment to administrators
-- Ticket status management
-- Category management (view, create, edit, remove)
-- Ticket replies (by administrators, with user notification)
-- Reply editing (by administrators)
-- Ticket notes (add/remove, admin-only visibility)
-- User management (view, edit, remove users)
-
-## Key Rules
-- All users must authenticate to access the portal
-- Users can only modify their own tickets; administrators can modify all tickets
-- All ticket information is shown on a single page
-- Replies are shown on the ticket detail page
-- Notes are only visible to administrators
-- Users receive a confirmation email upon registration
-- Users are notified of responses to their tickets
-
-**Key Rule:** Before implementing any code or making changes to the workspace, always provide the code and explanation for user review and approval.
-**Key Rule:** Always update tasks.md immediately after completing and implementing an approved task to keep project progress visible and accurate.
-**Key Rule:** Use JSDoc-style comments for all generated code, including PHP, to ensure consistent and clear documentation for classes, methods, parameters, and return values.
-
-# Coding Key Rules
-**Key Rule:** Always use modular route arrays for each domain (e.g., landingRoutes, ticketsRoutes) in Vue Router. Import and spread these arrays in the main router to keep routing organized, maintainable, and consistent with project conventions.
-**Key Rule:** When writing tests:
-  - Use the AAA (Arrange, Act, Assert) pattern for clarity and maintainability.
-  - Prefer Vitest globals (`describe`, `it`, `expect`) and remove unnecessary imports when enabled.
-  - Structure tests to be concise, readable, and focused on user-facing behavior.
-  - Ensure the correct testing library (e.g., `@testing-library/vue` for Vue components) is installed and used.
-  - Keep test files clean and idiomatic for maintainability.
-  - Remove redundant or obsolete tests promptly.
-**Key Rule:** Prefer including only direct fields in API resources and let the frontend fetch related data as needed, unless related data is always required for the view.
-- Always use TypeScript for Vue components and services (prefer `const`/`let`, arrow functions)
-- Separate logic: API calls in `services/`, types in `/types`, components in `/components`
-- Implement error handling on all Axios requests. Use Axios interceptors and a central error bag/message (`services/error` and `services/http`) for frontend error handling. Catch validation and server errors in the error bag/message and show these in the UI.
-- Never use `try/catch` or `.then/.catch`; always use `async/await`
-- Use Vue Router guards for protected routes
-- Always explain your choices and continue implementing only after confirmation
-- Always mark the task in `tasks.md` as complete upon completion of the task
-- Use `aria` labels for accessibility on all interactive frontend components (forms, buttons, links, etc.)
-- Write at least one Vitest test per feature when working on a task. Create new tests in `/klantenhulpportaal/tests`.
-- Use Test-Driven Development (TDD): For each new feature, first write a failing test, then write the minimal code needed to make the test pass.
-- Keep tests isolated and independent; avoid dependencies between tests.
-- Refactor code only after tests pass, and ensure all tests remain green after refactoring.
-- Write clear, descriptive test names and assertions that reflect feature requirements.
-- Cover edge cases and error conditions in your tests, not just the happy path.
-- Run the full test suite after every change to catch regressions early.
-- Remove or update obsolete tests when features change or are removed.
+### 🎯 Business Rules
+- Authentication required for all portal access
+- Users modify own tickets; admins modify all tickets
+- Notes are admin-only; replies notify users
+- Email confirmation for registration
 
 ## References
 - [Laravel Docs](https://laravel.com/docs)

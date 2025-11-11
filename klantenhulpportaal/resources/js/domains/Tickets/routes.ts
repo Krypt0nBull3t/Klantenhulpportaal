@@ -1,5 +1,5 @@
 import TestComponent from "./pages/TestComponent.vue";
 
 export const ticketsRoutes = [
-    {path: '/', component: TestComponent, name: 'TicketsTest'},
+    {path: '/tickets', component: TestComponent, name: 'TicketsTest'},
 ];

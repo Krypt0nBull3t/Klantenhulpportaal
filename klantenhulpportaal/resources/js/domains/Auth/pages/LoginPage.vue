@@ -1,43 +1,73 @@
 <template>
-  <div class="min-h-screen flex flex-col items-center justify-center bg-gray-50">
-    <form class="bg-white p-8 rounded shadow-md w-full max-w-sm" @submit.prevent="onSubmit">
-      <h2 class="text-2xl font-bold mb-6 text-center">Login</h2>
-      <div class="mb-4">
-        <label for="email" class="block text-gray-700 mb-2">Email</label>
-        <input id="email" v-model="email" type="email" class="w-full px-3 py-2 border rounded" />
+  <div class="min-h-screen w-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-md w-full space-y-8">
+      <div>
+        <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
+          Sign in to your account
+        </h2>
       </div>
-      <div class="mb-6">
-        <label for="password" class="block text-gray-700 mb-2">Password</label>
-        <input id="password" v-model="password" type="password" class="w-full px-3 py-2 border rounded" />
-      </div>
-      <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">Login</button>
-      <p v-if="error" class="mt-4 text-red-600 text-center">{{ error }}</p>
-    </form>
+      <form @submit.prevent="onSubmit" class="mt-8 space-y-6">
+        <ErrorMessage />
+        <div class="space-y-4">
+          <div>
+            <label for="email" class="block text-sm font-medium text-gray-700">E-mail</label>
+            <input
+              id="email"
+              v-model="credentials.email"
+              type="email"
+              autocomplete="username"
+              class="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
+              data-test="login-email"
+              aria-label="Email"
+              required
+            />
+            <FormError name="email" />
+          </div>
+          <div>
+            <label for="password" class="block text-sm font-medium text-gray-700">Wachtwoord</label>
+            <input
+              id="password"
+              v-model="credentials.password"
+              type="password"
+              autocomplete="current-password"
+              class="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
+              data-test="login-password"
+              aria-label="Password"
+              required
+            />
+            <FormError name="password" />
+          </div>
+        </div>
+        
+        <div>
+          <button
+            type="submit"
+            class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+            data-test="login-submit"
+            aria-label="Login"
+          >
+            Login
+          </button>
+        </div>
+      </form>
+    </div>
   </div>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import { ref } from 'vue';
+import { login } from '../../../services/auth';
+import ErrorMessage from '../../../components/ErrorMessage.vue';
+import FormError from '../../../components/FormError.vue';
+import router from '@/router';
 
-export default {
-  name: 'LoginPage',
-  setup() {
-    const email = ref('');
-    const password = ref('');
-    const error = ref('');
+const credentials = ref({
+  email: '',
+  password: ''
+});
 
-    function onSubmit() {
-      if (!email.value || !password.value) {
-        error.value = 'Please enter your email and password';
-      } else {
-        error.value = '';
-        // Handle login logic here
-      }
-    }
-
-    return { email, password, error, onSubmit };
-  },
-};
+async function onSubmit() {
+  await login(credentials.value);
+  router.push('/');
+}
 </script>
-
-<!-- Styling handled by Tailwind CSS -->
