@@ -5,7 +5,9 @@
 ## Phase 1: Foundation & Database Setup (Start Here)
 
 ### Core Database Entities
+
 #### Users Entity
+
 - ✅ Create migration for users table
 - ✅ Create seeder for users
 - ✅ Create factory for users
@@ -16,6 +18,7 @@
 - ✅ Create controller for users
 
 #### Categories Entity
+
 - ✅ Create migration for categories table
 - ✅ Create seeder for categories
 - ✅ Create factory for categories
@@ -26,6 +29,7 @@
 - ✅ Create controller for categories
 
 #### Tickets Entity
+
 - ✅ Create migration for tickets table
 - ✅ Create seeder for tickets
 - ✅ Create factory for tickets
@@ -36,6 +40,7 @@
 - ✅ Create controller for tickets
 
 #### Replies Entity
+
 - ✅ Create migration for replies table
 - ✅ Create seeder for replies
 - ✅ Create factory for replies
@@ -46,6 +51,7 @@
 - ✅ Create controller for replies
 
 #### Notes Entity
+
 - ✅ Create migration for notes table
 - ✅ Create seeder for notes
 - ✅ Create factory for notes
@@ -56,6 +62,7 @@
 - ✅ Create controller for notes
 
 ### Core Infrastructure Setup
+
 - ✅ Set up error handling with Axios interceptors
 - ✅ Set up central error bag/message in `services/error` and `services/http`
 - ✅ Create initial administrator user via seeder or migration
@@ -66,6 +73,7 @@
 ## Phase 2: Authentication System (Complete Before Moving Forward)
 
 ### Backend Authentication
+
 - ✅ Implement login endpoint
 - ✅ Implement backend validation for login using Laravel Form Request
 - ✅ Implement logout endpoint
@@ -81,27 +89,30 @@
 - ✅ Write tests for password recovery endpoint
 
 ### Frontend Authentication
+
 - ✅ Create a landing page
 - ✅ Create login page UI
 - ✅ Connect login form to backend
 - ✅ Create registration page UI
 - ✅ Connect registration form to backend
-- Create password recovery page UI
-- Connect password recovery form to backend
-- Implement logout functionality
-- Show confirmation messages and errors in UI
-- Implement Vue Router guards for protected routes
-- Test route protection for authenticated and admin-only pages
+- ✅ Create password recovery page UI
+- ✅ Connect password recovery form to backend
+- ✅ Implement logout functionality
+- ✅ Show errors in UI
+- ✅ Implement Vue Router guards for protected routes
+- ✅ Test route protection for authenticated and admin-only pages
 
 ### Authentication Styling
-- Style registration, login, and password recovery forms using Tailwind
-- Ensure responsive design for authentication pages
+
+- ✅ Style registration, login, and password recovery forms using Tailwind
+- ✅ Ensure responsive design for authentication pages
 
 ---
 
 ## Phase 3: Category Management (Simple Feature First)
 
 ### Backend
+
 - Implement category create endpoint
 - Implement backend validation for category creation using Laravel Form Request
 - Implement category read endpoint
@@ -114,6 +125,7 @@
 - Write tests for category delete endpoint
 
 ### Frontend
+
 - Create category overview page UI
 - Connect category overview page to backend
 - Create category creation form UI
@@ -121,9 +133,10 @@
 - Create category edit form UI
 - Connect category edit form to backend
 - Implement category removal UI
-- Show errors and success messages in UI
+- Show errors in UI
 
 ### Styling
+
 - Style category management pages and forms
 
 ---
@@ -131,6 +144,7 @@
 ## Phase 4: Core Ticket Management
 
 ### Backend
+
 - Implement ticket create endpoint
 - Implement backend validation for ticket creation using Laravel Form Request
 - Implement ticket read endpoint
@@ -144,6 +158,7 @@
 - Write tests for ticket delete endpoint
 
 ### Frontend
+
 - Create ticket overview page UI (list tickets)
 - Connect ticket overview page to backend
 - Create ticket detail page UI (show basic ticket info)
@@ -152,9 +167,10 @@
 - Connect ticket creation form to backend
 - Create ticket edit form UI
 - Connect ticket edit form to backend
-- Show errors and success messages in UI
+- Show errors in UI
 
 ### Styling
+
 - Style ticket overview and detail pages with Tailwind
 - Style ticket forms
 
@@ -163,6 +179,7 @@
 ## Phase 5: Ticket Replies & Notes
 
 ### Backend
+
 - Implement ticket reply create endpoint
 - Implement backend validation for ticket reply creation using Laravel Form Request
 - Implement ticket reply edit endpoint
@@ -178,6 +195,7 @@
 - Write tests for ticket note remove endpoint
 
 ### Frontend
+
 - Update ticket detail page UI to show replies and notes
 - Connect replies display to backend
 - Create reply creation form UI
@@ -189,9 +207,10 @@
 - Create note removal UI (admin-only)
 - Connect note removal UI to backend (admin-only)
 - Integrate notification display for user replies
-- Show errors and success messages in UI
+- Show errors in UI
 
 ### Styling
+
 - Style reply and note sections on ticket detail page
 - Style reply/note forms and notification messages
 
@@ -200,16 +219,19 @@
 ## Phase 6: Advanced Ticket Features
 
 ### Backend
+
 - Implement ticket assignment endpoint
 - Implement ticket status change endpoint
 - Write tests for ticket assignment endpoint
 - Write tests for ticket status change endpoint
 
 ### Frontend
+
 - Implement ticket assignment UI
 - Implement ticket status change UI
 
 ### Styling
+
 - Style assignment and status controls
 
 ---
@@ -217,6 +239,7 @@
 ## Phase 7: Admin User Management
 
 ### Backend
+
 - Create protected endpoint for admin promotion
 - Create MakeAdminRequest for admin promotion validation
 - Implement controller logic for admin promotion (admin-only)
@@ -230,15 +253,17 @@
 - Write tests for user remove endpoint
 
 ### Frontend
+
 - Create user overview page UI (admin-only)
 - Connect user overview page to backend
 - Create user edit form UI (admin-only)
 - Connect user edit form to backend (admin-only)
 - Create user removal UI (admin-only)
 - Connect user removal UI to backend (admin-only)
-- Show errors and success messages in UI
+- Show errors in UI
 
 ### Styling
+
 - Style user management pages and forms
 
 ---
@@ -246,12 +271,14 @@
 ## Phase 8: Final Polish & Testing
 
 ### Comprehensive Testing
+
 - Run full test suite and fix any regressions
 - Add integration tests for critical user flows
 - Test edge cases and error conditions
 - Ensure all features work together seamlessly
 
 ### Documentation & Maintenance
+
 - Document new endpoints, models, or business logic in copilot-instructions.md
 - Update README with setup and usage instructions
 - Create deployment documentation
@@ -261,6 +288,7 @@
 ## Development Guidelines (Apply Throughout All Phases)
 
 ### Test-Driven Development
+
 - For each new feature, first write a failing Vitest test in `/klantenhulpportaal/tests`
 - Write the minimal code needed to make the test pass (TDD)
 - Keep tests isolated and independent; avoid dependencies between tests
@@ -271,11 +299,13 @@
 - Remove or update obsolete tests when features change or are removed
 
 ### Task Management
+
 - Mark each completed task in tasks.md immediately upon completion
 - Complete entire phases before moving to the next phase
 - Ensure dependencies are met before starting dependent features
 
 ### Code Quality
+
 - Use TypeScript for all frontend code
 - Follow project conventions outlined in copilot-instructions.md
 - Implement proper error handling throughout the application

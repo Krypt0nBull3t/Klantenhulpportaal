@@ -1,49 +1,95 @@
-import { render } from '@testing-library/vue';
-import LandingPage from '../resources/js/domains/Landing/pages/LandingPage.vue';
+import { vi } from 'vitest';
+import { mount } from '@vue/test-utils';
 import { createRouter, createWebHistory } from 'vue-router';
+import { ref, type Ref } from 'vue';
+import type { User } from '../resources/js/types/auth';
+import LandingPage from '../resources/js/domains/Landing/pages/LandingPage.vue';
 
+// Mock the auth service
+vi.mock('../resources/js/services/auth', () => ({
+  isAuthenticated: ref(false),
+  loggedInUser: ref(null)
+}));
+
+// Import the mocked module to control it
+import * as authService from '../resources/js/services/auth';
+
+// Mock LogoutButton component
+vi.mock('../resources/js/components/LogoutButton.vue', () => ({
+  default: {
+    name: 'LogoutButton',
+    template: '<button type="button" data-test="logout-button">Logout</button>'
+  }
+}));
+
+// Create router for the tests
 const router = createRouter({
   history: createWebHistory(),
   routes: [
-    { path: '/', component: LandingPage },
+    { path: '/', component: { template: '<div>Home</div>' } },
     { path: '/login', component: { template: '<div>Login</div>' } },
     { path: '/register', component: { template: '<div>Register</div>' } },
-    { path: '/help', component: { template: '<div>Help</div>' } },
-  ],
+    { path: '/help', component: { template: '<div>Help</div>' } }
+  ]
 });
 
 describe('LandingPage', () => {
-  it('renders portal name and description', async () => {
-    // Arrange
-    const { getByRole, getByText } = render(LandingPage, { global: { plugins: [router] } });
-
-    // Act
-    const heading = getByRole('heading', { name: /klantenhulpportaal/i });
-    const description = getByText(/customer support portal/i);
-
-    // Assert
-    expect(heading).toBeDefined();
-    expect(description).toBeDefined();
+  beforeEach(() => {
+    // Reset auth state before each test
+    (authService.isAuthenticated as Ref<boolean>).value = false;
+    (authService.loggedInUser as Ref<User | null>).value = null;
   });
 
-  it('shows navigation links', async () => {
+  it('renders portal name and description', () => {
     // Arrange
-    const { getByRole } = render(LandingPage, { global: { plugins: [router] } });
+    const wrapper = mount(LandingPage, { global: { plugins: [router] } });
 
     // Act & Assert
-    expect(getByRole('link', { name: /login/i })).toBeDefined();
-    expect(getByRole('link', { name: /register/i })).toBeDefined();
-    expect(getByRole('link', { name: /help/i })).toBeDefined();
+    expect(wrapper.text()).toContain('Klantenhulpportaal');
+    expect(wrapper.text()).toContain('Customer Support Portal');
   });
 
-  it('has accessible ARIA labels', async () => {
+  it('has accessible ARIA labels', () => {
     // Arrange
-    const { getByLabelText } = render(LandingPage, { global: { plugins: [router] } });
+    const wrapper = mount(LandingPage, { global: { plugins: [router] } });
 
-    // Act
-    const nav = getByLabelText(/main navigation/i);
+    // Act & Assert
+    expect(wrapper.find('[aria-label="Main navigation"]').exists()).toBe(true);
+  });
 
-    // Assert
-    expect(nav).toBeDefined();
+  it('shows login/register links when user is not authenticated', () => {
+    // Arrange
+    (authService.isAuthenticated as Ref<boolean>).value = false;
+    (authService.loggedInUser as Ref<User | null>).value = null;
+    const wrapper = mount(LandingPage, { global: { plugins: [router] } });
+
+    // Act & Assert
+    expect(wrapper.text()).toContain('Login');
+    expect(wrapper.text()).toContain('Register');
+    expect(wrapper.find('[data-test="logout-button"]').exists()).toBe(false);
+  });
+
+  it('shows user name and logout button when authenticated', () => {
+    // Arrange
+    const testUser: User = { id: 1, name: 'John Doe', email: 'john@example.com', is_admin: false };
+    (authService.isAuthenticated as Ref<boolean>).value = true;
+    (authService.loggedInUser as Ref<User | null>).value = testUser;
+    const wrapper = mount(LandingPage, { global: { plugins: [router] } });
+
+    // Act & Assert
+    expect(wrapper.text()).toContain('John Doe');
+    expect(wrapper.find('[data-test="logout-button"]').exists()).toBe(true);
+  });
+
+  it('hides login/register links when user is authenticated', () => {
+    // Arrange
+    const testUser: User = { id: 1, name: 'John Doe', email: 'john@example.com', is_admin: false };
+    (authService.isAuthenticated as Ref<boolean>).value = true;
+    (authService.loggedInUser as Ref<User | null>).value = testUser;
+    const wrapper = mount(LandingPage, { global: { plugins: [router] } });
+
+    // Act & Assert  
+    expect(wrapper.text()).not.toContain('Login');
+    expect(wrapper.text()).not.toContain('Register');
   });
 });

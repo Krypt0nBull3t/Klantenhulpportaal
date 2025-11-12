@@ -5,9 +5,11 @@ import RegistrationPage from '../../resources/js/domains/Auth/pages/Registration
 import { register } from '../../resources/js/services/auth';
 import { destroyMessage, destroyErrors, setMessage, setErrorBag } from '../../resources/js/services/error';
 
-// Mock the registration service
+// Mock the auth service
 vi.mock('../../resources/js/services/auth', () => ({
   register: vi.fn(),
+  isAuthenticated: { value: false },
+  isAdmin: { value: false }
 }));
 
 describe('RegistrationPage UI', () => {

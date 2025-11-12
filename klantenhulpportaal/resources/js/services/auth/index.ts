@@ -1,5 +1,5 @@
 import { postRequest, getRequest } from '../http';
-import { ref, readonly } from 'vue';
+import { ref, computed } from 'vue';
 import type { User } from '../../types/auth';
 
 const user = ref<User | null>(null);
@@ -40,6 +40,11 @@ export async function register(data: RegistrationData) {
     return response;
 }
 
+export async function sendPasswordResetLink(email: string) {
+    const response = await postRequest('/password/email', { email });
+    return response;
+}
+
 export async function checkAuth(): Promise<boolean> {
     const response = await fetchUser();
     if (response?.data && response.data.email) {
@@ -51,10 +56,12 @@ export async function checkAuth(): Promise<boolean> {
     }
 }
 
-export function useAuth() {
-    return {
-        user: readonly(user),
-    };
-}
+export const loggedInUser = computed(() => user.value);
+
+export const isAuthenticated = computed(() => user.value !== null);
+
+export const loggedinUser = () => user.value;
+
+export const isAdmin = computed(() => user.value?.is_admin);
 
 export type { LoginCredentials, User };

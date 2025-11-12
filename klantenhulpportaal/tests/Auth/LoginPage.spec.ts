@@ -1,36 +1,38 @@
-// tests/Auth/LoginPage.spec.ts
 import { mount, flushPromises } from '@vue/test-utils';
 import { vi } from 'vitest';
 import LoginPage from '../../resources/js/domains/Auth/pages/LoginPage.vue';
 import { setMessage, setErrorBag, destroyMessage, destroyErrors } from '../../resources/js/services/error';
 import { createRouter, createWebHistory } from 'vue-router';
+import { login } from '../../resources/js/services/auth';
 
 // Mock the auth service
 vi.mock('../../resources/js/services/auth', () => ({
   login: vi.fn(),
+  isAuthenticated: { value: false },
+  isAdmin: { value: false }
 }));
 
-/**
- * LoginPage UI
- *
- * This test verifies that the LoginPage component renders a login form with:
- * - An email input field (data-test, type, aria-label)
- * - A password input field (data-test, type, aria-label)
- * - A submit button (data-test, type, aria-label)
- * - ErrorMessage component for general errors
- * - FormError component for field-specific errors
- *
- * The test follows the AAA (Arrange, Act, Assert) pattern.
- */
 describe('LoginPage UI', () => {
+  let router: any;
+
   beforeEach(() => {
     destroyMessage();
     destroyErrors();
+    
+    // Create router for each test
+    router = createRouter({
+      history: createWebHistory(),
+      routes: [
+        { path: '/login', component: LoginPage },
+        { path: '/register', component: { template: '<div>Register</div>' } },
+        { path: '/password/email', component: { template: '<div>Password Recovery</div>' } }
+      ]
+    });
   });
 
   it('renders the login form with required fields, data-test, and accessibility attributes', () => {
     // Arrange
-    const wrapper = mount(LoginPage);
+    const wrapper = mount(LoginPage, { global: { plugins: [router] } });
 
     // Act
     const emailInput = wrapper.find('[data-test="login-email"]');
@@ -53,8 +55,7 @@ describe('LoginPage UI', () => {
 
   it('calls login service with correct credentials when the form is submitted', async () => {
     // Arrange
-    const { login } = await import('../../resources/js/services/auth');
-    const wrapper = mount(LoginPage);
+    const wrapper = mount(LoginPage, { global: { plugins: [router] } });
 
     // Act
     await wrapper.find('[data-test="login-email"]').setValue('user@example.com');
@@ -86,7 +87,7 @@ describe('LoginPage UI', () => {
     await flushPromises();
 
     // Act
-    const emailErrors = wrapper.findAll('.form-error');
+    const emailErrors = wrapper.findAll('[data-test="form-error"]');
 
     // Assert
     expect(emailErrors.length).toBeGreaterThan(0);
@@ -100,7 +101,7 @@ describe('LoginPage UI', () => {
     await flushPromises();
 
     // Act
-    const passwordErrors = wrapper.findAll('.form-error');
+    const passwordErrors = wrapper.findAll('[data-test="form-error"]');
 
     // Assert
     expect(passwordErrors.length).toBeGreaterThan(0);
