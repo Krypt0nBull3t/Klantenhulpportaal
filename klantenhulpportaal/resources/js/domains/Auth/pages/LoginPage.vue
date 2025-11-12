@@ -66,7 +66,7 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue';
-import { login } from '../../../services/auth';
+import { login, isAdmin } from '../../../services/auth';
 import ErrorMessage from '../../../components/ErrorMessage.vue';
 import FormError from '../../../components/FormError.vue';
 import router from '../../../router';
@@ -78,6 +78,12 @@ const credentials = ref({
 
 async function onSubmit() {
   await login(credentials.value);
-  router.push('/');
+  
+  // Check if user is admin and redirect accordingly
+  if (isAdmin.value) {
+    router.push('/admin');
+  } else {
+    router.push('/');
+  }
 }
 </script>

@@ -2,7 +2,7 @@ import { mount, flushPromises } from '@vue/test-utils';
 import { vi } from 'vitest';
 import LoginPage from '../../resources/js/domains/Auth/pages/LoginPage.vue';
 import { setMessage, setErrorBag, destroyMessage, destroyErrors } from '../../resources/js/services/error';
-import { createRouter, createWebHistory } from 'vue-router';
+import { createRouter, createWebHistory, type Router } from 'vue-router';
 import { login } from '../../resources/js/services/auth';
 
 // Mock the auth service
@@ -13,7 +13,7 @@ vi.mock('../../resources/js/services/auth', () => ({
 }));
 
 describe('LoginPage UI', () => {
-  let router: any;
+  let router: Router;
 
   beforeEach(() => {
     destroyMessage();

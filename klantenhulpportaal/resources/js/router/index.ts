@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import { ticketsRoutes } from '../domains/Tickets/routes';
 import { landingRoutes } from '../domains/Landing/routes';
 import { authRoutes } from '../domains/Auth/routes';
+import { adminRoutes } from '../domains/Admin/routes';
 import { isAuthenticated, isAdmin } from '../services/auth';
 
 const router = createRouter({
@@ -9,7 +10,8 @@ const router = createRouter({
     routes: [
         ...landingRoutes,
         ...authRoutes,
-        ...ticketsRoutes
+        ...ticketsRoutes,
+        ...adminRoutes
     ],
 });
 

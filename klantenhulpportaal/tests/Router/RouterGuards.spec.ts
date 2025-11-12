@@ -117,6 +117,44 @@ describe('Actual Router Guards Integration', () => {
     });
   });
 
+  describe('Admin-Only Routes (requiresAdmin)', () => {
+    it('redirects non-admin authenticated users away from admin routes', async () => {
+      // Arrange
+      (authService.isAuthenticated as Ref<boolean>).value = true;
+      (authService.isAdmin as Ref<boolean>).value = false;
+      
+      // Act - try to access the real admin dashboard route
+      await router.push('/admin');
+      
+      // Assert
+      expect(router.currentRoute.value.path).toBe('/');
+    });
+
+    it('allows admin users to access admin routes', async () => {
+      // Arrange
+      (authService.isAuthenticated as Ref<boolean>).value = true;
+      (authService.isAdmin as Ref<boolean>).value = true;
+      
+      // Act - access the real admin dashboard route
+      await router.push('/admin');
+      
+      // Assert
+      expect(router.currentRoute.value.path).toBe('/admin');
+    });
+
+    it('redirects unauthenticated users to login for admin routes', async () => {
+      // Arrange
+      (authService.isAuthenticated as Ref<boolean>).value = false;
+      (authService.isAdmin as Ref<boolean>).value = false;
+      
+      // Act - try to access admin route while unauthenticated
+      await router.push('/admin');
+      
+      // Assert - should redirect to login due to requiresAuth check happening first
+      expect(router.currentRoute.value.path).toBe('/login');
+    });
+  });
+
   describe('Authentication Flow', () => {
     it('redirects unauthenticated user to login when accessing protected route', async () => {
       // Arrange

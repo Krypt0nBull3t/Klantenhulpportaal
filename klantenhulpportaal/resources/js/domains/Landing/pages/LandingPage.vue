@@ -12,6 +12,8 @@
       <!-- Show when authenticated -->
       <template v-else>
         <span class="text-gray-700">Welcome, {{ loggedInUser?.name }}!</span>
+        <router-link to="/tickets" class="text-blue-600 hover:underline" role="link">Tickets</router-link>
+        <router-link v-if="isAdmin" to="/admin" class="text-purple-600 hover:underline font-semibold" role="link">Admin Dashboard</router-link>
         <router-link to="/help" class="text-blue-600 hover:underline" role="link">Help</router-link>
         <LogoutButton />
       </template>
@@ -24,7 +26,7 @@
 </template>
 
 <script setup lang="ts">
-import { isAuthenticated, loggedInUser } from '../../../services/auth';
+import { isAuthenticated, loggedInUser, isAdmin } from '../../../services/auth';
 import LogoutButton from '../../../components/LogoutButton.vue';
 
 /**

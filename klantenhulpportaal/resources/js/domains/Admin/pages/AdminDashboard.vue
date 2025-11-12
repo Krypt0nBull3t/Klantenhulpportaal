@@ -1,0 +1,88 @@
+<template>
+  <div class="min-h-screen bg-gray-50">
+    <!-- Admin Navigation -->
+    <nav class="bg-white shadow-sm border-b border-gray-200">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <div class="flex justify-between items-center">
+          <div>
+            <h1 class="text-2xl font-bold text-gray-900">Admin Dashboard</h1>
+            <p class="text-gray-600">Manage your customer support portal</p>
+          </div>
+          <div class="flex items-center space-x-4">
+            <span class="text-gray-600">Welcome, {{ loggedInUser?.name }}</span>
+            <router-link to="/" class="text-blue-600 hover:underline">← Back to Site</router-link>
+            <LogoutButton />
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Dashboard Content -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      
+      <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <!-- Dashboard cards will go here -->
+        <div class="bg-white overflow-hidden shadow rounded-lg">
+          <div class="px-4 py-5 sm:p-6">
+            <div class="flex items-center">
+              <div class="flex-shrink-0">
+                <div class="w-8 h-8 bg-indigo-500 rounded-md flex items-center justify-center">
+                  <span class="text-white text-sm font-medium">T</span>
+                </div>
+              </div>
+              <div class="ml-5 w-0 flex-1">
+                <dl>
+                  <dt class="text-sm font-medium text-gray-500 truncate">Total Tickets</dt>
+                  <dd class="text-lg font-medium text-gray-900">Coming Soon</dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-white overflow-hidden shadow rounded-lg">
+          <div class="px-4 py-5 sm:p-6">
+            <div class="flex items-center">
+              <div class="flex-shrink-0">
+                <div class="w-8 h-8 bg-green-500 rounded-md flex items-center justify-center">
+                  <span class="text-white text-sm font-medium">U</span>
+                </div>
+              </div>
+              <div class="ml-5 w-0 flex-1">
+                <dl>
+                  <dt class="text-sm font-medium text-gray-500 truncate">Total Users</dt>
+                  <dd class="text-lg font-medium text-gray-900">Coming Soon</dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-white overflow-hidden shadow rounded-lg">
+          <div class="px-4 py-5 sm:p-6">
+            <div class="flex items-center">
+              <div class="flex-shrink-0">
+                <div class="w-8 h-8 bg-yellow-500 rounded-md flex items-center justify-center">
+                  <span class="text-white text-sm font-medium">C</span>
+                </div>
+              </div>
+              <div class="ml-5 w-0 flex-1">
+                <dl>
+                  <dt class="text-sm font-medium text-gray-500 truncate">Categories</dt>
+                  <dd class="text-lg font-medium text-gray-900">Coming Soon</dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script lang="ts" setup>
+import { loggedInUser } from '../../../services/auth';
+import LogoutButton from '../../../components/LogoutButton.vue';
+
+// Admin dashboard functionality will be implemented later
+</script>

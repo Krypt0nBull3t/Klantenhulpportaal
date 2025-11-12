@@ -8,7 +8,8 @@ import LandingPage from '../resources/js/domains/Landing/pages/LandingPage.vue';
 // Mock the auth service
 vi.mock('../resources/js/services/auth', () => ({
   isAuthenticated: ref(false),
-  loggedInUser: ref(null)
+  loggedInUser: ref(null),
+  isAdmin: ref(false)
 }));
 
 // Import the mocked module to control it
@@ -38,6 +39,7 @@ describe('LandingPage', () => {
     // Reset auth state before each test
     (authService.isAuthenticated as Ref<boolean>).value = false;
     (authService.loggedInUser as Ref<User | null>).value = null;
+    (authService.isAdmin as Ref<boolean>).value = false;
   });
 
   it('renders portal name and description', () => {
@@ -91,5 +93,33 @@ describe('LandingPage', () => {
     // Act & Assert  
     expect(wrapper.text()).not.toContain('Login');
     expect(wrapper.text()).not.toContain('Register');
+  });
+
+  it('shows admin dashboard link for admin users', () => {
+    // Arrange
+    const adminUser: User = { id: 1, name: 'Admin User', email: 'admin@example.com', is_admin: true };
+    (authService.isAuthenticated as Ref<boolean>).value = true;
+    (authService.loggedInUser as Ref<User | null>).value = adminUser;
+    (authService.isAdmin as Ref<boolean>).value = true;
+    const wrapper = mount(LandingPage, { global: { plugins: [router] } });
+
+    // Act & Assert
+    expect(wrapper.text()).toContain('Admin Dashboard');
+    const adminLink = wrapper.find('a[href="/admin"]');
+    expect(adminLink.exists()).toBe(true);
+  });
+
+  it('hides admin dashboard link for non-admin users', () => {
+    // Arrange
+    const regularUser: User = { id: 1, name: 'Regular User', email: 'user@example.com', is_admin: false };
+    (authService.isAuthenticated as Ref<boolean>).value = true;
+    (authService.loggedInUser as Ref<User | null>).value = regularUser;
+    (authService.isAdmin as Ref<boolean>).value = false;
+    const wrapper = mount(LandingPage, { global: { plugins: [router] } });
+
+    // Act & Assert
+    expect(wrapper.text()).not.toContain('Admin Dashboard');
+    const adminLink = wrapper.find('a[href="/admin"]');
+    expect(adminLink.exists()).toBe(false);
   });
 });
