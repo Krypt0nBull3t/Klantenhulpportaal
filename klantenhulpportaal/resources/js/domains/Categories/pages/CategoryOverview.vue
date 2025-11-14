@@ -1,6 +1,6 @@
 <template>
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <ErrorMessage data-test="category-error" />
+    <ErrorMessage data-test="error-message" />
     
     <div class="mb-6">
       <h1 data-test="category-overview-title" class="text-3xl font-bold text-gray-900 mb-2">
@@ -10,20 +10,27 @@
     </div>
 
     <div class="bg-white shadow rounded-lg">
-      <div class="px-6 py-4 border-b border-gray-200">
-        <p class="text-sm text-gray-600">Category management tools will be available soon.</p>
+      <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
+        <p class="text-sm text-gray-600">Manage your support categories</p>
+        <button
+          data-test="add-category-btn"
+          class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium"
+          aria-label="Add category"
+        >
+          Categorie toevoegen
+        </button>
       </div>
 
       <div class="px-6 py-4">
         <!-- Empty state -->
-        <div v-if="!categories.length" data-test="category-empty-state" class="text-center py-8 text-gray-500">
+        <div v-if="!categories.value.length" data-test="category-empty-state" class="text-center py-8 text-gray-500">
           No categories found.
         </div>
         
         <!-- Categories list -->
         <ul v-else data-test="category-list" class="divide-y divide-gray-200">
           <li 
-            v-for="category in categories" 
+            v-for="category in categories.value" 
             :key="category.id" 
             data-test="category-row" 
             class="py-4 flex items-center justify-between"
@@ -52,13 +59,14 @@
 <script setup lang="ts">
 import { categoryStore } from '../store';
 import ErrorMessage from '../../../components/ErrorMessage.vue';
+import { computed } from 'vue';
 
 /**
  * @component CategoryOverview
  * @description Admin page showing categories automatically loaded from backend via categoryStore
  */
 
-const categories = categoryStore.getters.all;
+const categories = computed(() => categoryStore.getters.all);
 
 /**
  * Delete a category with confirmation using store action

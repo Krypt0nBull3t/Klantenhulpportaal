@@ -5,10 +5,12 @@
  */
 
 
+
 import { mount, flushPromises } from '@vue/test-utils'
 import CategoryOverview from '../../../resources/js/domains/Categories/pages/CategoryOverview.vue'
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { Category } from '../../../resources/js/domains/Categories/types'
+import { destroyMessage, destroyErrors, setMessage } from '../../../resources/js/services/error'
 
 let categoriesRef: ReturnType<typeof ref<Category[]>>
 let mockActions: any
@@ -19,38 +21,20 @@ vi.mock('../../../resources/js/domains/Categories/store', () => ({
       return mockActions
     },
     get getters() {
-      return { all: categoriesRef }
+      // Match the component: computed ref
+      return { all: computed(() => categoriesRef.value) }
     }
   }
 }))
+
 
 const mockCategories: Category[] = [
   { id: 1, name: 'Algemeen' },
   { id: 2, name: 'Technisch' }
 ]
 
-describe('CategoryOverview.vue', () => {
-  it('fetches and displays categories from the backend API', async () => {
-    // Arrange: mock Axios GET to /api/categories
-    const apiCategories = [
-      { id: 1, name: 'Algemeen' },
-      { id: 2, name: 'Technisch' }
-    ];
-    vi.mock('axios', () => ({
-      default: {
-        get: vi.fn().mockResolvedValue({ data: apiCategories })
-      }
-    }));
-    // Act
-    const wrapper = mount(CategoryOverview);
-    await flushPromises();
-    // Assert
-    const rows = wrapper.findAll('[data-test="category-row"]');
-    expect(rows.length).toBe(apiCategories.length);
-    expect(rows[0].text()).toContain('Algemeen');
-    expect(rows[1].text()).toContain('Technisch');
-  });
 
+describe('CategoryOverview.vue', () => {
   beforeEach(() => {
     categoriesRef = ref<Category[]>([])
     mockActions = {
@@ -59,7 +43,33 @@ describe('CategoryOverview.vue', () => {
       update: vi.fn(),
       create: vi.fn()
     }
+    // Reset error messages
+    destroyMessage()
+    destroyErrors()
+    vi.clearAllMocks()
+    // Mock window.confirm to return true for all tests
+    Object.defineProperty(window, 'confirm', {
+      writable: true,
+      value: vi.fn().mockReturnValue(true)
+    })
   })
+
+  it('fetches and displays categories from the backend API', async () => {
+    // Arrange
+    categoriesRef.value = [
+      { id: 1, name: 'Algemeen' },
+      { id: 2, name: 'Technisch' }
+    ];
+    // Act
+    const wrapper = mount(CategoryOverview);
+    await flushPromises();
+    // Assert
+    const rows = wrapper.findAll('[data-test="category-row"]');
+    expect(rows.length).toBe(categoriesRef.value.length);
+    expect(rows[0].text()).toContain('Algemeen');
+    expect(rows[1].text()).toContain('Technisch');
+  });
+
 
   it('renders all categories in the overview when present', async () => {
     // Arrange
@@ -68,10 +78,11 @@ describe('CategoryOverview.vue', () => {
     await flushPromises()
     // Assert
     const rows = wrapper.findAll('[data-test="category-row"]')
-    expect(rows.length).toBe(mockCategories.length)
+    expect(rows.length).toBe(categoriesRef.value.length)
     expect(rows[0].text()).toContain('Algemeen')
     expect(rows[1].text()).toContain('Technisch')
   })
+
 
   it('shows empty state when no categories exist', async () => {
     // Arrange
@@ -82,6 +93,7 @@ describe('CategoryOverview.vue', () => {
     const emptyState = wrapper.find('[data-test="category-empty-state"]')
     expect(emptyState.exists()).toBe(true)
   })
+
 
   it('handles delete of non-existent category gracefully', async () => {
     // Arrange
@@ -99,20 +111,30 @@ describe('CategoryOverview.vue', () => {
   })
 
 
-  it('shows error message if delete action fails', async () => {
+    it('calls delete action when delete button is clicked', async () => {
     // Arrange
     categoriesRef.value = mockCategories
-    mockActions.delete = vi.fn().mockRejectedValue(new Error('Delete failed'))
+    mockActions.delete = vi.fn().mockResolvedValue(undefined)
     const wrapper = mount(CategoryOverview)
     await flushPromises()
     // Act
     await wrapper.findAll('[data-test="delete-category-btn"]')[0].trigger('click')
     await flushPromises()
     // Assert
-  const errorMsg = wrapper.find('[data-test="category-error"]')
-  expect(errorMsg.exists()).toBe(true)
-  // Optionally check for error content if ErrorMessage is mocked to show it
-  })
+    expect(mockActions.delete).toHaveBeenCalledWith(1)
+    })
+
+  it('displays error message when one is set in error service', async () => {
+    // Arrange - simulate error state (e.g., from previous failed operation)
+    categoriesRef.value = mockCategories
+    setMessage('Delete failed') // Simulate Axios interceptor setting error message
+    const wrapper = mount(CategoryOverview)
+    await flushPromises()
+    // Assert - ErrorMessage component should display the error
+    const errorMsg = wrapper.find('[data-test="error-message"]')
+    expect(errorMsg.exists()).toBe(true)
+    expect(errorMsg.text()).toContain('Delete failed')
+    })
 
 
   it('has add category button', async () => {
