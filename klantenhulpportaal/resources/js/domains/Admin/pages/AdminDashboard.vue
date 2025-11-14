@@ -1,25 +1,17 @@
 <template>
   <div class="min-h-screen bg-gray-50">
-    <!-- Admin Navigation -->
-    <nav class="bg-white shadow-sm border-b border-gray-200">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-        <div class="flex justify-between items-center">
-          <div>
-            <h1 class="text-2xl font-bold text-gray-900">Admin Dashboard</h1>
-            <p class="text-gray-600">Manage your customer support portal</p>
-          </div>
-          <div class="flex items-center space-x-4">
-            <span class="text-gray-600">Welcome, {{ loggedInUser?.name }}</span>
-            <router-link to="/" class="text-blue-600 hover:underline">← Back to Site</router-link>
-            <LogoutButton />
-          </div>
+    <!-- Admin Page Header -->
+    <div class="bg-white border-b border-gray-200">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div>
+          <h1 class="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
+          <p class="mt-2 text-gray-600">Manage your customer support portal</p>
         </div>
       </div>
-    </nav>
+    </div>
 
     <!-- Dashboard Content -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      
       <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
         <!-- Dashboard cards will go here -->
         <div class="bg-white overflow-hidden shadow rounded-lg">
@@ -81,8 +73,16 @@
 </template>
 
 <script lang="ts" setup>
-import { loggedInUser } from '../../../services/auth';
-import LogoutButton from '../../../components/LogoutButton.vue';
+/**
+ * @component AdminDashboard
+ * @description Main admin dashboard page showing overview statistics and quick actions.
+ * Navigation is now handled globally by the NavBar component with admin-specific options.
+ * 
+ * Features:
+ * - Overview cards for tickets, users, categories
+ * - Quick action buttons for common admin tasks
+ * - Clean layout focused on dashboard content
+ */
 
 // Admin dashboard functionality will be implemented later
 </script>

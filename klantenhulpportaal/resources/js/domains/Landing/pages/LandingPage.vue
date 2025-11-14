@@ -1,33 +1,64 @@
 
 <template>
-  <div class="min-h-screen w-screen bg-gray-50 flex flex-col">
-  <nav aria-label="Main navigation" class="w-full flex justify-center p-6 space-x-6">
-      <!-- Show when NOT authenticated -->
-      <template v-if="!isAuthenticated">
-        <router-link to="/login" class="text-blue-600 hover:underline" role="link">Login</router-link>
-        <router-link to="/register" class="text-blue-600 hover:underline" role="link">Register</router-link>
-        <router-link to="/help" class="text-blue-600 hover:underline" role="link">Help</router-link>
-      </template>
-      
-      <!-- Show when authenticated -->
-      <template v-else>
-        <span class="text-gray-700">Welcome, {{ loggedInUser?.name }}!</span>
-        <router-link to="/tickets" class="text-blue-600 hover:underline" role="link">Tickets</router-link>
-        <router-link v-if="isAdmin" to="/admin" class="text-purple-600 hover:underline font-semibold" role="link">Admin Dashboard</router-link>
-        <router-link to="/help" class="text-blue-600 hover:underline" role="link">Help</router-link>
-        <LogoutButton />
-      </template>
-    </nav>
-    <main class="flex-1 flex flex-col items-center justify-center">
-      <h1 class="text-4xl font-bold mb-4" role="heading" aria-level="1">Klantenhulpportaal</h1>
-      <p class="text-lg text-gray-700 mb-8">Customer Support Portal for all your ticket needs.</p>
-    </main>
+  <div class="flex-1 flex flex-col items-center justify-center py-16">
+    <h1 class="text-4xl font-bold mb-4" role="heading" aria-level="1">Klantenhulpportaal</h1>
+    <p class="text-lg text-gray-700 mb-8 text-center max-w-2xl">
+      Customer Support Portal for all your ticket needs. Submit tickets, track progress, and get help from our support team.
+    </p>
+    
+    <!-- Call-to-action section for different user states -->
+    <div class="mt-8 space-y-4" v-if="!isAuthenticated">
+      <div class="flex space-x-4">
+        <router-link 
+          to="/register" 
+          class="bg-blue-600 text-white px-6 py-3 rounded-md hover:bg-blue-700 transition-colors font-medium"
+          data-test="landing-register-cta"
+        >
+          Get Started
+        </router-link>
+        <router-link 
+          to="/login" 
+          class="bg-gray-200 text-gray-800 px-6 py-3 rounded-md hover:bg-gray-300 transition-colors font-medium"
+          data-test="landing-login-cta"
+        >
+          Sign In
+        </router-link>
+      </div>
+    </div>
+    
+    <div class="mt-8" v-else-if="isAuthenticated && !isAdmin">
+      <router-link 
+        to="/tickets" 
+        class="bg-blue-600 text-white px-6 py-3 rounded-md hover:bg-blue-700 transition-colors font-medium"
+        data-test="landing-tickets-cta"
+      >
+        View My Tickets
+      </router-link>
+    </div>
+    
+    <div class="mt-8" v-else-if="isAdmin">
+      <div class="flex space-x-4">
+        <router-link 
+          to="/admin" 
+          class="bg-purple-600 text-white px-6 py-3 rounded-md hover:bg-purple-700 transition-colors font-medium"
+          data-test="landing-admin-cta"
+        >
+          Admin Dashboard
+        </router-link>
+        <router-link 
+          to="/tickets" 
+          class="bg-blue-600 text-white px-6 py-3 rounded-md hover:bg-blue-700 transition-colors font-medium"
+          data-test="landing-tickets-cta"
+        >
+          My Tickets
+        </router-link>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { isAuthenticated, loggedInUser, isAdmin } from '../../../services/auth';
-import LogoutButton from '../../../components/LogoutButton.vue';
+import { isAuthenticated, isAdmin } from '../../../services/auth';
 
 /**
  * @component LandingPage

@@ -27,6 +27,14 @@ http.interceptors.response.use(
             setErrorBag(error.response.data.errors); // Sla validatiefouten op in de error bag
             setMessage(error.response.data.message); // Sla de algemene foutmelding op
         }
+        
+        // Handle 401 Unauthorized silently - this is expected when checking auth status
+        if (error.response && error.response.status === 401) {
+            // Don't set error messages for authentication failures
+            // This allows fetchUser() to fail gracefully during app initialization
+            return Promise.resolve({ data: null }); // Return empty response instead of throwing
+        }
+        
         return Promise.reject(error);
     }
 );

@@ -45,17 +45,6 @@ export async function sendPasswordResetLink(email: string) {
     return response;
 }
 
-export async function checkAuth(): Promise<boolean> {
-    const response = await fetchUser();
-    if (response?.data && response.data.email) {
-        user.value = response.data as User;
-        return true;
-    } else {
-        user.value = null;
-        return false;
-    }
-}
-
 export const loggedInUser = computed(() => user.value);
 
 export const isAuthenticated = computed(() => user.value !== null);

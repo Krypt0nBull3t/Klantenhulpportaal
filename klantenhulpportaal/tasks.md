@@ -107,6 +107,16 @@
 - ✅ Style registration, login, and password recovery forms using Tailwind
 - ✅ Ensure responsive design for authentication pages
 
+### Global Navigation
+
+- ✅ Create reusable NavBar component with role-based navigation
+- ✅ Integrate global navigation in App.vue to show on all pages
+- ✅ Implement admin-specific navigation items (Admin Dashboard, Manage Users, Categories)
+- ✅ Implement smart "Tickets" link (shows "My Tickets" for users, "Tickets" for admins)
+- ✅ Remove duplicate navigation from LandingPage and AdminDashboard components
+- ✅ Update tests for navigation changes and component integration
+- ✅ Ensure navigation is accessible on auth pages for better UX
+
 ---
 
 ## Phase 3: Category Management (Simple Feature First)

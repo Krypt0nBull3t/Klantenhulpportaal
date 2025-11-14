@@ -51,51 +51,34 @@ describe('LandingPage', () => {
     expect(wrapper.text()).toContain('Customer Support Portal');
   });
 
-  it('has accessible ARIA labels', () => {
-    // Arrange
-    const wrapper = mount(LandingPage, { global: { plugins: [router] } });
-
-    // Act & Assert
-    expect(wrapper.find('[aria-label="Main navigation"]').exists()).toBe(true);
-  });
-
-  it('shows login/register links when user is not authenticated', () => {
+  it('shows call-to-action buttons for non-authenticated users', () => {
     // Arrange
     (authService.isAuthenticated as Ref<boolean>).value = false;
-    (authService.loggedInUser as Ref<User | null>).value = null;
     const wrapper = mount(LandingPage, { global: { plugins: [router] } });
 
     // Act & Assert
-    expect(wrapper.text()).toContain('Login');
-    expect(wrapper.text()).toContain('Register');
-    expect(wrapper.find('[data-test="logout-button"]').exists()).toBe(false);
+    expect(wrapper.find('[data-test="landing-register-cta"]').exists()).toBe(true);
+    expect(wrapper.find('[data-test="landing-login-cta"]').exists()).toBe(true);
+    expect(wrapper.find('[data-test="landing-tickets-cta"]').exists()).toBe(false);
+    expect(wrapper.find('[data-test="landing-admin-cta"]').exists()).toBe(false);
   });
 
-  it('shows user name and logout button when authenticated', () => {
+  it('shows tickets CTA for authenticated regular users', () => {
     // Arrange
     const testUser: User = { id: 1, name: 'John Doe', email: 'john@example.com', is_admin: false };
     (authService.isAuthenticated as Ref<boolean>).value = true;
     (authService.loggedInUser as Ref<User | null>).value = testUser;
+    (authService.isAdmin as Ref<boolean>).value = false;
     const wrapper = mount(LandingPage, { global: { plugins: [router] } });
 
     // Act & Assert
-    expect(wrapper.text()).toContain('John Doe');
-    expect(wrapper.find('[data-test="logout-button"]').exists()).toBe(true);
+    expect(wrapper.find('[data-test="landing-tickets-cta"]').exists()).toBe(true);
+    expect(wrapper.find('[data-test="landing-register-cta"]').exists()).toBe(false);
+    expect(wrapper.find('[data-test="landing-login-cta"]').exists()).toBe(false);
+    expect(wrapper.find('[data-test="landing-admin-cta"]').exists()).toBe(false);
   });
 
-  it('hides login/register links when user is authenticated', () => {
-    // Arrange
-    const testUser: User = { id: 1, name: 'John Doe', email: 'john@example.com', is_admin: false };
-    (authService.isAuthenticated as Ref<boolean>).value = true;
-    (authService.loggedInUser as Ref<User | null>).value = testUser;
-    const wrapper = mount(LandingPage, { global: { plugins: [router] } });
-
-    // Act & Assert  
-    expect(wrapper.text()).not.toContain('Login');
-    expect(wrapper.text()).not.toContain('Register');
-  });
-
-  it('shows admin dashboard link for admin users', () => {
+  it('shows admin and tickets CTAs for admin users', () => {
     // Arrange
     const adminUser: User = { id: 1, name: 'Admin User', email: 'admin@example.com', is_admin: true };
     (authService.isAuthenticated as Ref<boolean>).value = true;
@@ -104,22 +87,19 @@ describe('LandingPage', () => {
     const wrapper = mount(LandingPage, { global: { plugins: [router] } });
 
     // Act & Assert
-    expect(wrapper.text()).toContain('Admin Dashboard');
-    const adminLink = wrapper.find('a[href="/admin"]');
-    expect(adminLink.exists()).toBe(true);
+    expect(wrapper.find('[data-test="landing-admin-cta"]').exists()).toBe(true);
+    expect(wrapper.find('[data-test="landing-tickets-cta"]').exists()).toBe(true);
+    expect(wrapper.find('[data-test="landing-register-cta"]').exists()).toBe(false);
+    expect(wrapper.find('[data-test="landing-login-cta"]').exists()).toBe(false);
   });
 
-  it('hides admin dashboard link for non-admin users', () => {
-    // Arrange
-    const regularUser: User = { id: 1, name: 'Regular User', email: 'user@example.com', is_admin: false };
-    (authService.isAuthenticated as Ref<boolean>).value = true;
-    (authService.loggedInUser as Ref<User | null>).value = regularUser;
-    (authService.isAdmin as Ref<boolean>).value = false;
+  it('has correct CTA button links', () => {
+    // Arrange - Test for non-authenticated user CTAs
+    (authService.isAuthenticated as Ref<boolean>).value = false;
     const wrapper = mount(LandingPage, { global: { plugins: [router] } });
 
     // Act & Assert
-    expect(wrapper.text()).not.toContain('Admin Dashboard');
-    const adminLink = wrapper.find('a[href="/admin"]');
-    expect(adminLink.exists()).toBe(false);
+    expect(wrapper.find('[data-test="landing-register-cta"]').attributes('href')).toBe('/register');
+    expect(wrapper.find('[data-test="landing-login-cta"]').attributes('href')).toBe('/login');
   });
 });
