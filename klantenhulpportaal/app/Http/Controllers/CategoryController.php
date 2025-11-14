@@ -25,21 +25,20 @@ class CategoryController extends Controller
 
     /**
      * Store a newly created category (admin-only).
-     * @function store
      * @param StoreCategoryRequest $request
-     * @returns CategoryResource
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(StoreCategoryRequest $request)
     {
         $category = Category::create($request->validated());
-        return new CategoryResource($category);
+        // Return resource with 201 status code
+        return (new CategoryResource($category))->response()->setStatusCode(201);
     }
 
     /**
      * Display the specified category.
-     * @function show
      * @param Category $category
-     * @returns CategoryResource
+     * @return CategoryResource
      */
     public function show(Category $category)
     {
@@ -67,6 +66,9 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
+        if (!auth()->user()?->is_admin) {
+            return response()->json(['message' => 'Forbidden'], 403);
+        }
         $category->delete();
         return response()->json(null, 204);
     }

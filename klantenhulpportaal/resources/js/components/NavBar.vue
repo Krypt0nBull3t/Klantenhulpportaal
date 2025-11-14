@@ -33,14 +33,6 @@
             >
               Register
             </router-link>
-            <router-link 
-              to="/help" 
-              class="text-blue-600 hover:underline transition-colors" 
-              role="link"
-              data-test="navbar-help"
-            >
-              Help
-            </router-link>
           </template>
           
           <!-- Show when authenticated -->
@@ -121,9 +113,9 @@ import LogoutButton from './LogoutButton.vue';
  * - Responsive design with consistent styling
  * 
  * Navigation Logic:
- * - Non-authenticated users: Login, Register, Help
- * - Authenticated regular users: My Tickets, Help, Logout, Welcome message
- * - Authenticated admin users: Tickets (all tickets), Help, Logout, Welcome message + Admin Dashboard, Manage Users, Categories
+ * - Non-authenticated users: Login, Register
+ * - Authenticated regular users: My Tickets, Logout, Welcome message
+ * - Authenticated admin users: Tickets (all tickets), Logout, Welcome message + Admin Dashboard, Manage Users, Categories
  * 
  * Smart Tickets Link:
  * - Regular users see "My Tickets" - shows only their tickets

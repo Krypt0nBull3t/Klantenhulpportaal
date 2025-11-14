@@ -123,16 +123,16 @@
 
 ### Backend
 
-- Implement category create endpoint
-- Implement backend validation for category creation using Laravel Form Request
-- Implement category read endpoint
-- Implement category update endpoint
-- Implement backend validation for category update using Laravel Form Request
-- Implement category delete endpoint
-- Write tests for category create endpoint
-- Write tests for category read endpoint
-- Write tests for category update endpoint
-- Write tests for category delete endpoint
+- ✅ Implement category create endpoint
+- ✅ Implement backend validation for category creation using Laravel Form Request
+- ✅ Implement category show endpoint
+- ✅ Implement category update endpoint
+- ✅ Implement backend validation for category update using Laravel Form Request
+- ✅ Implement category delete endpoint
+- ✅ Write tests for category create endpoint
+- ✅ Write tests for category show endpoint
+- ✅ Write tests for category update endpoint
+- ✅ Write tests for category delete endpoint
 
 ### Frontend
 
@@ -157,13 +157,13 @@
 
 - Implement ticket create endpoint
 - Implement backend validation for ticket creation using Laravel Form Request
-- Implement ticket read endpoint
+- Implement ticket show endpoint
 - Implement ticket update endpoint
 - Implement backend validation for ticket update using Laravel Form Request
 - Implement ticket delete endpoint
 - Write authorization policies for ticket access
 - Write tests for ticket create endpoint
-- Write tests for ticket read endpoint
+- Write tests for ticket show endpoint
 - Write tests for ticket update endpoint
 - Write tests for ticket delete endpoint
 

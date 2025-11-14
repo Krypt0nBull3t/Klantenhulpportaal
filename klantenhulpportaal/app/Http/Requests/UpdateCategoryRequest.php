@@ -30,10 +30,10 @@ class UpdateCategoryRequest extends FormRequest
     {
         return [
             'name' => [
-                'sometimes',
+                'required',
                 'string',
                 'max:255',
-                'unique:categories,name,' . $this->route('category'),
+                'unique:categories,name,' . $this->route('category')->id,
             ],
         ];
     }
