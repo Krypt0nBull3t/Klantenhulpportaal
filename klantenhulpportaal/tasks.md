@@ -136,8 +136,8 @@
 
 ### Frontend
 
-- Create category overview page UI
-- Connect category overview page to backend
+- ✅ Create category overview page UI
+- ✅ Connect category overview page to backend
 - Create category creation form UI
 - Connect category creation form to backend
 - Create category edit form UI

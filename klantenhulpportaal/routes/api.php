@@ -21,13 +21,13 @@ Route::middleware('web')->group(function () {
 });
 
 // Protected API routes (auth:sanctum)
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware('auth:sanctum', 'web')->group(function () {
     /**
      * Category management endpoints (admin-only).
      */
+    Route::get('/categories', [CategoryController::class, 'index']);
     Route::post('/categories', [CategoryController::class, 'store']);
     Route::get('/categories/{category}', [CategoryController::class, 'show']);
     Route::put('/categories/{category}', [CategoryController::class, 'update']);
     Route::delete('/categories/{category}', [CategoryController::class, 'destroy']);
-    // Future: Route::get('/categories', ...) etc.
 });

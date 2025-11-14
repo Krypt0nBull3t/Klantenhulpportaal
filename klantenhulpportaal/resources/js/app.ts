@@ -1,20 +1,14 @@
 import { createApp } from 'vue';
 import App from './App.vue';
 import router from './router';
-import { fetchUser } from './services/auth';
 
 /**
- * Initialize the Vue application with authentication state restoration
+ * Initialize the Vue application
+ * Authentication state restoration is handled by the router guard
  */
-async function initializeApp() {
+function initializeApp() {
   const app = createApp(App);
   app.use(router);
-  
-  // Restore user authentication state from server session/cookie
-  // This prevents users from appearing logged out on page refresh (F5)
-  // 401 errors are handled silently by the HTTP interceptor
-  await fetchUser();
-  
   app.mount('#app');
 }
 

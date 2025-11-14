@@ -32,7 +32,7 @@ const router = createRouter({
     { path: '/register', component: { template: '<div>Register</div>' } },
     { path: '/tickets', component: { template: '<div>Tickets</div>' } },
     { path: '/admin', component: { template: '<div>Admin</div>' } },
-    { path: '/help', component: { template: '<div>Help</div>' } }
+    { path: '/categories', component: { template: '<div>Categories</div>' } }
   ]
 });
 
@@ -52,7 +52,6 @@ describe('NavBar Component', () => {
       // Assert
       expect(wrapper.find('[data-test="navbar-login"]').exists()).toBe(true);
       expect(wrapper.find('[data-test="navbar-register"]').exists()).toBe(true);
-      expect(wrapper.find('[data-test="navbar-help"]').exists()).toBe(true);
       expect(wrapper.find('[data-test="navbar-welcome"]').exists()).toBe(false);
       expect(wrapper.find('[data-test="navbar-tickets"]').exists()).toBe(false);
     });
@@ -64,7 +63,6 @@ describe('NavBar Component', () => {
       // Assert
       expect(wrapper.find('[data-test="navbar-login"]').attributes('href')).toBe('/login');
       expect(wrapper.find('[data-test="navbar-register"]').attributes('href')).toBe('/register');
-      expect(wrapper.find('[data-test="navbar-help"]').attributes('href')).toBe('/help');
     });
   });
 
@@ -83,7 +81,6 @@ describe('NavBar Component', () => {
       expect(wrapper.find('[data-test="navbar-welcome"]').text()).toContain('Welcome, Regular User!');
       expect(wrapper.find('[data-test="navbar-tickets"]').exists()).toBe(true);
       expect(wrapper.find('[data-test="navbar-tickets"]').text()).toBe('My Tickets');
-      expect(wrapper.find('[data-test="navbar-help"]').exists()).toBe(true);
       expect(wrapper.find('[data-test="logout-button"]').exists()).toBe(true);
       
       // Should not show admin links
@@ -112,12 +109,10 @@ describe('NavBar Component', () => {
       expect(wrapper.find('[data-test="navbar-welcome"]').text()).toContain('Welcome, Admin User!');
       expect(wrapper.find('[data-test="navbar-tickets"]').exists()).toBe(true);
       expect(wrapper.find('[data-test="navbar-tickets"]').text()).toBe('Tickets');
-      expect(wrapper.find('[data-test="navbar-help"]').exists()).toBe(true);
       expect(wrapper.find('[data-test="logout-button"]').exists()).toBe(true);
       
       // Should show admin links
       expect(wrapper.find('[data-test="navbar-admin-dashboard"]').exists()).toBe(true);
-      expect(wrapper.find('[data-test="navbar-admin-users"]').exists()).toBe(true);
       expect(wrapper.find('[data-test="navbar-admin-categories"]').exists()).toBe(true);
       
       // Should not show login/register
@@ -137,8 +132,7 @@ describe('NavBar Component', () => {
 
       // Assert
       expect(wrapper.find('[data-test="navbar-admin-dashboard"]').attributes('href')).toBe('/admin');
-      expect(wrapper.find('[data-test="navbar-admin-users"]').attributes('href')).toBe('/admin/users');
-      expect(wrapper.find('[data-test="navbar-admin-categories"]').attributes('href')).toBe('/admin/categories');
+      expect(wrapper.find('[data-test="navbar-admin-categories"]').attributes('href')).toBe('/categories');
     });
   });
 

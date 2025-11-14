@@ -16,7 +16,7 @@ class CategoryController extends Controller
     /**
      * Display a listing of categories.
      * @function index
-     * @returns \Illuminate\Http\Resources\Json\AnonymousResourceCollection<CategoryResource>
+     * @returns array<CategoryResource>
      */
     public function index()
     {

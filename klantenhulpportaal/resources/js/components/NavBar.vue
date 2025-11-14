@@ -52,15 +52,7 @@
                 Admin Dashboard
               </router-link>
               <router-link 
-                to="/admin/users" 
-                class="text-purple-600 hover:underline transition-colors" 
-                role="link"
-                data-test="navbar-admin-users"
-              >
-                Manage Users
-              </router-link>
-              <router-link 
-                to="/admin/categories" 
+                to="/categories" 
                 class="text-purple-600 hover:underline transition-colors" 
                 role="link"
                 data-test="navbar-admin-categories"
@@ -81,14 +73,6 @@
             
             
             <!-- Common authenticated user links -->
-            <router-link 
-              to="/help" 
-              class="text-blue-600 hover:underline transition-colors" 
-              role="link"
-              data-test="navbar-help"
-            >
-              Help
-            </router-link>
             <LogoutButton />
           </template>
         </div>

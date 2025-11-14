@@ -54,14 +54,19 @@
           <div class="px-4 py-5 sm:p-6">
             <div class="flex items-center">
               <div class="flex-shrink-0">
-                <div class="w-8 h-8 bg-yellow-500 rounded-md flex items-center justify-center">
+                <router-link
+                  to="/categories"
+                  class="w-8 h-8 bg-yellow-500 rounded-md flex items-center justify-center"
+                  role="link"
+                  data-test="admin-dashboard-categories-link"
+                >
                   <span class="text-white text-sm font-medium">C</span>
-                </div>
+                </router-link>
               </div>
               <div class="ml-5 w-0 flex-1">
                 <dl>
                   <dt class="text-sm font-medium text-gray-500 truncate">Categories</dt>
-                  <dd class="text-lg font-medium text-gray-900">Coming Soon</dd>
+                  <dd class="text-lg font-medium text-gray-900">{{ categories.value.length }}</dd>
                 </dl>
               </div>
             </div>
@@ -73,6 +78,8 @@
 </template>
 
 <script lang="ts" setup>
+import { categoryStore } from '../../Categories/store';
+import { computed } from 'vue';
 /**
  * @component AdminDashboard
  * @description Main admin dashboard page showing overview statistics and quick actions.
@@ -85,4 +92,7 @@
  */
 
 // Admin dashboard functionality will be implemented later
+const categories = computed(() => categoryStore.getters.all);
+categoryStore.actions.getAll();
+
 </script>
