@@ -7,15 +7,20 @@
 
 
 import { mount, flushPromises } from '@vue/test-utils'
-import CategoryOverview from '../../../resources/js/domains/Categories/pages/CategoryOverview.vue'
+import CategoryOverview from '../../resources/js/domains/Categories/pages/CategoryOverview.vue'
 import { ref, computed } from 'vue'
-import { Category } from '../../../resources/js/domains/Categories/types'
-import { destroyMessage, destroyErrors, setMessage } from '../../../resources/js/services/error'
+import { Category } from '../../resources/js/domains/Categories/types'
+import { destroyMessage, destroyErrors, setMessage } from '../../resources/js/services/error'
 
 let categoriesRef: ReturnType<typeof ref<Category[]>>
-let mockActions: any
+let mockActions: {
+  getAll: ReturnType<typeof vi.fn>
+  delete: ReturnType<typeof vi.fn>
+  update: ReturnType<typeof vi.fn>
+  create: ReturnType<typeof vi.fn>
+}
 
-vi.mock('../../../resources/js/domains/Categories/store', () => ({
+vi.mock('../../resources/js/domains/Categories/store', () => ({
   categoryStore: {
     get actions() {
       return mockActions
@@ -147,6 +152,6 @@ describe('CategoryOverview.vue', () => {
     // Assert
     const addBtn = wrapper.find('[data-test="add-category-btn"]')
     expect(addBtn.exists()).toBe(true)
-    expect(addBtn.text()).toContain('Categorie toevoegen')
-  })
+    expect(addBtn.text()).toContain('Add Category')
+})
 })

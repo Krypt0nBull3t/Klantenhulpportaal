@@ -70,8 +70,9 @@ import { login, isAdmin } from '../../../services/auth';
 import ErrorMessage from '../../../components/ErrorMessage.vue';
 import FormError from '../../../components/FormError.vue';
 import router from '../../../router';
+import type { LoginCredentials } from '../types';
 
-const credentials = ref({
+const credentials = ref<LoginCredentials>({
   email: '',
   password: ''
 });

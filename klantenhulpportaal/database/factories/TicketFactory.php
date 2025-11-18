@@ -25,9 +25,9 @@ class TicketFactory extends Factory
                 'title' => fake()->sentence(),
                 'content' => fake()->paragraph(),
                 'status' => fake()->numberBetween(0, 2),
-                'user_id' => User::inRandomOrder()->first()->id,
+                'user_id' => User::factory(),
                 'assigned_to' => $assignedTo,
-                'category_id' => Category::inRandomOrder()->first()->id,
+                'category_id' => Category::factory(),
             ];
     }
 }

@@ -138,16 +138,15 @@
 
 - ✅ Create category overview page UI
 - ✅ Connect category overview page to backend
-- Create category creation form UI
-- Connect category creation form to backend
-- Create category edit form UI
-- Connect category edit form to backend
-- Implement category removal UI
-- Show errors in UI
+- ✅ Create category creation form UI
+- ✅ Connect category creation form to backend
+- ✅ Create category edit form UI
+- ✅ Connect category edit form to backend
+- ✅ Show errors in UI
 
 ### Styling
 
-- Style category management pages and forms
+- ✅ Style category management pages and forms
 
 ---
 
@@ -155,28 +154,27 @@
 
 ### Backend
 
-- Implement ticket create endpoint
-- Implement backend validation for ticket creation using Laravel Form Request
-- Implement ticket show endpoint
-- Implement ticket update endpoint
-- Implement backend validation for ticket update using Laravel Form Request
-- Implement ticket delete endpoint
-- Write authorization policies for ticket access
-- Write tests for ticket create endpoint
-- Write tests for ticket show endpoint
-- Write tests for ticket update endpoint
-- Write tests for ticket delete endpoint
+- ✅ Implement ticket create endpoint
+- ✅ Implement backend validation for ticket creation using Laravel Form Request
+- ✅ Implement ticket show endpoint
+- ✅ Implement ticket update endpoint
+- ✅ Implement backend validation for ticket update using Laravel Form Request
+- ✅ Implement ticket delete endpoint
+- ✅ Write tests for ticket create endpoint
+- ✅ Write tests for ticket show endpoint
+- ✅ Write tests for ticket update endpoint
+- ✅ Write tests for ticket delete endpoint
 
 ### Frontend
 
-- Create ticket overview page UI (list tickets)
-- Connect ticket overview page to backend
-- Create ticket detail page UI (show basic ticket info)
-- Connect ticket detail page to backend
-- Create ticket creation form UI
-- Connect ticket creation form to backend
-- Create ticket edit form UI
-- Connect ticket edit form to backend
+- ✅ Create ticket overview page UI (list tickets)
+- ✅ Connect ticket overview page to backend
+- ✅ Create ticket detail page UI (show basic ticket info)
+- ✅ Connect ticket detail page to backend
+- ✅ Create ticket creation form UI
+- ✅ Connect ticket creation form to backend
+- ✅ Create ticket edit form UI
+- ✅ Connect ticket edit form to backend
 - Show errors in UI
 
 ### Styling

@@ -40,6 +40,7 @@ class TicketController extends Controller
     {
         $data = $request->validated();
         $data['user_id'] = auth()->id();
+        $data['status'] = $data['status'] ?? 1; // Default status: 1 (Open)
         $ticket = Ticket::create($data);
         return new TicketResource($ticket);
     }
@@ -52,7 +53,11 @@ class TicketController extends Controller
      */
     public function show(Ticket $ticket)
     {
-        $this->authorize('view', $ticket);
+        $user = auth()->user();
+        // Admins can view any ticket, regular users can only view their own tickets
+        if (!$user->is_admin && $ticket->user_id !== $user->id) {
+            abort(403);
+        }
         $ticket->load('replies');
         return new TicketResource($ticket);
     }
@@ -66,7 +71,11 @@ class TicketController extends Controller
      */
     public function update(UpdateTicketRequest $request, Ticket $ticket)
     {
-        $this->authorize('update', $ticket);
+        $user = auth()->user();
+        // Admins can update any ticket, regular users can only update their own tickets
+        if (!$user->is_admin && $ticket->user_id !== $user->id) {
+            abort(403);
+        }
         $ticket->update($request->validated());
         return new TicketResource($ticket);
     }
@@ -79,7 +88,11 @@ class TicketController extends Controller
      */
     public function destroy(Ticket $ticket)
     {
-        $this->authorize('delete', $ticket);
+        $user = auth()->user();
+        // Admins can delete any ticket, regular users can only delete their own tickets
+        if (!$user->is_admin && $ticket->user_id !== $user->id) {
+            abort(403);
+        }
         $ticket->delete();
         return response()->json(null, 204);
     }

@@ -22,7 +22,9 @@ class UserController extends Controller
     public function index()
     {
         // Only allow admins to list all users
-        $this->authorize('viewAny', User::class);
+        if (!auth()->user()->is_admin) {
+            abort(403, 'Unauthorized');
+        }
         return UserResource::collection(User::all());
     }
 
@@ -46,7 +48,10 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        $this->authorize('view', $user);
+        // Allow users to view themselves or admins to view any user
+        if (!auth()->user()->is_admin && auth()->id() !== $user->id) {
+            abort(403, 'Unauthorized');
+        }
         return new UserResource($user);
     }
 
@@ -59,7 +64,10 @@ class UserController extends Controller
      */
     public function update(UpdateUserRequest $request, User $user)
     {
-        $this->authorize('update', $user);
+        // Allow users to update themselves or admins to update any user
+        if (!auth()->user()->is_admin && auth()->id() !== $user->id) {
+            abort(403, 'Unauthorized');
+        }
         $user->update($request->validated());
         return new UserResource($user);
     }

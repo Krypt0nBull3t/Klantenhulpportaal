@@ -13,7 +13,7 @@
             <label for="email" class="block text-sm font-medium text-gray-700">E-mail</label>
             <input
               id="email"
-              v-model="email"
+              v-model="form.email"
               type="email"
               autocomplete="username"
               class="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
@@ -45,11 +45,14 @@ import ErrorMessage from '../../../components/ErrorMessage.vue';
 import FormError from '../../../components/FormError.vue';
 import { sendPasswordResetLink } from '../../../services/auth/';
 import router from '../../../router';
+import type { PasswordResetForm } from '../types';
 
-const email = ref('');
+const form = ref<PasswordResetForm>({
+  email: ''
+});
 
 async function onSubmit() {
-    await sendPasswordResetLink(email.value);
+    await sendPasswordResetLink(form.value.email);
     router.push('/login');
 }
  

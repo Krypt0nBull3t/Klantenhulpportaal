@@ -1,10 +1,10 @@
-import TestComponent from "./pages/TestComponent.vue";
+import TicketOverview from "./pages/TicketOverview.vue";
 
 export const ticketsRoutes = [
     {
         path: '/tickets', 
-        component: TestComponent, 
-        name: 'TicketsTest',
+        component: TicketOverview, 
+        name: 'TicketsOverview',
         meta: { requiresAuth: true }
     },
 ];

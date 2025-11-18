@@ -1,20 +1,9 @@
 import { postRequest, getRequest } from '../http';
 import { ref, computed } from 'vue';
 import type { User } from '../../types/auth';
+import type { LoginCredentials, RegistrationForm } from '../../domains/Auth/types';
 
 const user = ref<User | null>(null);
-
-interface LoginCredentials {
-    email: string;
-    password: string;
-}
-
-interface RegistrationData {
-    name: string;
-    email: string;
-    password: string;
-    password_confirmation: string;
-}
 
 export const login = async (credentials: LoginCredentials) => {
     const { data } = await postRequest('/login', credentials);
@@ -35,7 +24,7 @@ export async function fetchUser() {
     return { data };
 }
 
-export async function register(data: RegistrationData) {
+export async function register(data: RegistrationForm) {
     const response = await postRequest('/register', data);
     return response;
 }
@@ -53,4 +42,4 @@ export const loggedinUser = () => user.value;
 
 export const isAdmin = computed(() => user.value?.is_admin);
 
-export type { LoginCredentials, User };
+export type { User };

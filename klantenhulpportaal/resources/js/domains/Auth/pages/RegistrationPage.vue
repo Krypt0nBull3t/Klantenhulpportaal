@@ -94,8 +94,9 @@ import { register } from '../../../services/auth';
 import ErrorMessage from '../../../components/ErrorMessage.vue';
 import FormError from '../../../components/FormError.vue';
 import router from '../../../router';
+import type { RegistrationForm } from '../types';
 
-const form = ref({
+const form = ref<RegistrationForm>({
   name: '',
   email: '',
   password: '',

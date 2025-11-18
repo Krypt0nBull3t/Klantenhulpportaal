@@ -61,6 +61,22 @@ tests/                   # Frontend/backend tests
 - **Independence**: Keep tests isolated, avoid dependencies between tests
 - **Maintenance**: Run full test suite after changes, remove/update obsolete tests
 
+### 🧪 Advanced Testing Rules (CategoryCreateForm Learnings)
+- **Error Handling in Tests**: 
+  - Never use local component state for validation errors in components
+  - Always use centralized error service: `setErrorBag({ fieldName: ['Error message'] })` for validation
+  - Use `<FormError name="fieldName" />` without conditions - component handles error checking internally
+  - Clean up errors in test `beforeEach()` with `destroyMessage()` and `destroyErrors()`
+- **Store Mocking Pattern**:
+  - Use getter-based mocks: `get actions() { return mockActions }` instead of static objects
+  - Initialize mock functions in `beforeEach()`: `mockActions = { actionName: vi.fn() }`
+  - Type mock actions: `let mockActions: { actionName: ReturnType<typeof vi.fn> }`
+- **Form Testing Requirements**:
+  - Trigger form submission on `<form>` element: `await wrapper.find('form').trigger('submit')`
+  - Never rely on button clicks alone for `@submit.prevent` handlers
+  - Test component props with `.props()`, DOM attributes with `.attributes()`
+- **Research Pattern**: Always check existing test files for project-specific patterns before implementing new tests
+
 ### 🎨 Frontend Standards  
 - **KEY RULE**: Always use modular route arrays for each domain (e.g., landingRoutes, ticketsRoutes) in Vue Router. Import and spread these arrays in the main router to keep routing organized, maintainable, and consistent with project conventions
 - **KEY RULE**: Prefer including only direct fields in API resources and let the frontend fetch related data as needed, unless related data is always required for the view

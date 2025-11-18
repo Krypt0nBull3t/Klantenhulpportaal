@@ -5,12 +5,12 @@
 
 import { mount, flushPromises } from '@vue/test-utils';
 import { ref, computed } from 'vue';
-import CategoryOverview from '../../../resources/js/domains/Categories/pages/CategoryOverview.vue';
-import { categoryStore } from '../../../resources/js/domains/Categories/store';
-import { destroyErrors } from '../../../resources/js/services/error';
+import CategoryOverview from '../../resources/js/domains/Categories/pages/CategoryOverview.vue';
+import { categoryStore } from '../../resources/js/domains/Categories/store';
+import { destroyErrors } from '../../resources/js/services/error';
 
 // Mock the store
-vi.mock('../../../resources/js/domains/Categories/store', () => {
+vi.mock('../../resources/js/domains/Categories/store', () => {
   const mockCategories = ref([]);
   return {
     categoryStore: {
@@ -28,7 +28,7 @@ vi.mock('../../../resources/js/domains/Categories/store', () => {
 });
 
 // Mock ErrorMessage component
-vi.mock('../../../resources/js/components/ErrorMessage.vue', () => ({
+vi.mock('../../resources/js/components/ErrorMessage.vue', () => ({
   default: {
     name: 'ErrorMessage',
     template: '<div data-test="category-error"></div>'
