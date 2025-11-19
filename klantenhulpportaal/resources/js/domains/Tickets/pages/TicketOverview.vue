@@ -1,5 +1,5 @@
 <template>
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <PageContainer>
         <ErrorMessage data-test="error-message" />
 
         <div class="mb-6">
@@ -7,243 +7,184 @@
             <p class="text-gray-600">Manage support tickets</p>
         </div>
 
-        <div class="bg-white shadow rounded-lg overflow-hidden">
+        <BaseCard variant="default" no-padding>
             <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
                 <p class="text-sm text-gray-600">View and manage your tickets</p>
-                <button
-                    data-test="create-ticket-btn"
-                    class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium"
-                    aria-label="Create new ticket"
-                    @click="openModal('create')"
-                >
+                <BaseButton data-test="create-ticket-btn" aria-label="Create new ticket" @click="openModal('create')">
                     Create Ticket
-                </button>
+                </BaseButton>
             </div>
 
-            <div class="px-6 py-4 bg-gray-50 border-b border-gray-200">
-                <div class="flex flex-wrap gap-4 items-center">
-                    <div class="flex-1 min-w-64">
-                        <input
-                            v-model="filterConfig.title"
-                            type="text"
-                            placeholder="Search titles and content..."
-                            data-test="filter-title-input"
-                            class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
-                        />
-                    </div>
-
-                    <div class="min-w-32">
-                        <select
-                            v-model="filterConfig.status"
-                            data-test="filter-status-select"
-                            class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
-                        >
-                            <option v-for="option in statusOptions" :key="option.value" :value="option.value">
-                                {{ option.label }}
-                            </option>
-                        </select>
-                    </div>
-
-                    <div class="min-w-32">
-                        <select
-                            v-model="filterConfig.category"
-                            data-test="filter-category-select"
-                            class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
-                        >
-                            <option v-for="option in categoryOptions" :key="option.value" :value="option.value">
-                                {{ option.label }}
-                            </option>
-                        </select>
-                    </div>
-
-                    <div v-if="isAdmin" class="min-w-32">
-                        <select
-                            v-model="filterConfig.creator"
-                            data-test="filter-creator-select"
-                            class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
-                        >
-                            <option v-for="option in creatorOptions" :key="option.value" :value="option.value">
-                                {{ option.label }}
-                            </option>
-                        </select>
-                    </div>
-
-                    <div class="flex gap-2">
-                        <button
-                            v-if="sortConfig.field"
-                            @click="clearSort"
-                            data-test="clear-sort-btn"
-                            class="px-3 py-2 text-sm text-gray-600 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-1 focus:ring-blue-500"
-                        >
-                            Clear Sort
-                        </button>
-                        <button
-                            v-if="hasActiveFilters"
-                            @click="clearFilters"
-                            data-test="clear-filters-btn"
-                            class="px-3 py-2 text-sm text-gray-600 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-1 focus:ring-blue-500"
-                        >
-                            Clear Filters
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="overflow-hidden">
-                <div
-                    v-if="!sortedAndFilteredTickets.length"
-                    data-test="ticket-empty-state"
-                    class="text-center py-8 px-6 text-gray-500"
-                >
-                    <span v-if="!tickets.length">No tickets found.</span>
-                    <span v-else>No tickets match your current filters.</span>
-                </div>
-
-                <div v-else class="overflow-x-auto -mx-6">
-                    <div class="inline-block min-w-full py-2 align-middle">
-                        <table data-test="ticket-list" class="min-w-full divide-y divide-gray-200">
-                            <thead class="bg-gray-50">
-                                <tr>
-                                    <th
-                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-0 w-2/5"
-                                    >
-                                        Ticket
-                                    </th>
-                                    <th
-                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap cursor-pointer hover:bg-gray-100 select-none"
-                                        @click="handleSort('status')"
-                                        data-test="sort-status-header"
-                                    >
-                                        Status {{ getSortIcon('status') }}
-                                    </th>
-                                    <th
-                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap cursor-pointer hover:bg-gray-100 select-none"
-                                        @click="handleSort('category')"
-                                        data-test="sort-category-header"
-                                    >
-                                        Category {{ getSortIcon('category') }}
-                                    </th>
-                                    <th
-                                        v-if="isAdmin"
-                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap cursor-pointer hover:bg-gray-100 select-none"
-                                        @click="handleSort('creator')"
-                                        data-test="sort-creator-header"
-                                    >
-                                        Creator {{ getSortIcon('creator') }}
-                                    </th>
-                                    <th
-                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap cursor-pointer hover:bg-gray-100 select-none"
-                                        @click="handleSort('created_at')"
-                                        data-test="sort-created-header"
-                                    >
-                                        Created {{ getSortIcon('created_at') }}
-                                    </th>
-                                    <Wrapper>Actions</Wrapper>
-                                </tr>
-                            </thead>
-                            <tbody class="bg-white divide-y divide-gray-200">
-                                <tr
-                                    v-for="ticket in sortedAndFilteredTickets"
-                                    :key="ticket.id"
-                                    data-test="ticket-row"
-                                    class="hover:bg-gray-50"
-                                >
-                                    <td class="px-6 py-4">
-                                        <div class="max-w-sm">
-                                            <div class="text-sm font-medium text-gray-900 truncate">
-                                                {{ ticket.title }}
-                                            </div>
-                                            <div class="text-sm text-gray-500 truncate">{{ ticket.content }}</div>
-                                        </div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <span
-                                            data-test="ticket-status"
-                                            class="inline-flex px-2 py-1 text-xs font-semibold rounded-full"
-                                            :class="getStatusClass(ticket.status)"
-                                        >
-                                            {{ getStatusText(ticket.status) }}
-                                        </span>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <span
-                                            class="inline-flex px-2 py-1 text-xs font-medium bg-gray-100 text-gray-800 rounded-full"
-                                        >
-                                            {{ getCategoryName(ticket.category_id) }}
-                                        </span>
-                                    </td>
-                                    <td v-if="isAdmin" class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                        {{ getUserName(ticket.user_id) }}
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                        {{ formatDate(ticket.created_at) }}
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
-                                        <button
-                                            data-test="view-ticket-btn"
-                                            class="text-blue-600 hover:text-blue-900"
-                                            aria-label="View ticket details"
-                                            @click="openModal('view', ticket)"
-                                        >
-                                            View
-                                        </button>
-                                        <button
-                                            data-test="edit-ticket-btn"
-                                            class="text-indigo-600 hover:text-indigo-900"
-                                            aria-label="Edit ticket"
-                                            @click="openModal('edit', ticket)"
-                                        >
-                                            Edit
-                                        </button>
-                                        <button
-                                            data-test="delete-ticket-btn"
-                                            class="text-red-600 hover:text-red-900"
-                                            aria-label="Delete ticket"
-                                            @click="handleDeleteTicket(ticket.id)"
-                                        >
-                                            Delete
-                                        </button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div
-            v-if="activeModal"
-            class="fixed inset-0 z-50 flex items-center justify-center bg-white/20"
-            @click.self="closeModal"
-        >
-            <div class="bg-white rounded-lg shadow-lg p-8 w-full max-w-2xl max-h-[90vh] overflow-y-auto relative">
-                <button
-                    class="absolute top-2 right-2 text-gray-400 hover:text-gray-600 text-2xl"
-                    aria-label="Close"
-                    @click="closeModal"
-                >
-                    &times;
-                </button>
-                <h2 class="text-xl font-bold mb-6 text-gray-900" data-test="modal-title">
-                    {{ getModalTitle() }}
-                </h2>
-
-                <TicketCreateForm v-if="activeModal === 'create'" @close="closeModal" />
-                <TicketEditForm
-                    v-else-if="activeModal === 'edit' && selectedTicket"
-                    :ticket="selectedTicket"
-                    @close="closeModal"
+            <FilterBar>
+                <FilterInput
+                    v-model="filterConfig.title"
+                    placeholder="Search titles and content..."
+                    data-test="filter-title-input"
+                    full-width
                 />
-                <TicketDetailView
-                    v-else-if="activeModal === 'view' && selectedTicket"
-                    :ticket="selectedTicket"
-                    @close="closeModal"
-                    @edit="handleEditFromDetail"
-                />
-            </div>
-        </div>
-    </div>
+
+                <FilterSelect v-model="filterConfig.status" data-test="filter-status-select">
+                    <option v-for="option in statusOptions" :key="option.value" :value="option.value">
+                        {{ option.label }}
+                    </option>
+                </FilterSelect>
+
+                <FilterSelect v-model="filterConfig.category" data-test="filter-category-select">
+                    <option v-for="option in categoryOptions" :key="option.value" :value="option.value">
+                        {{ option.label }}
+                    </option>
+                </FilterSelect>
+
+                <FilterSelect v-if="isAdmin" v-model="filterConfig.creator" data-test="filter-creator-select">
+                    <option v-for="option in creatorOptions" :key="option.value" :value="option.value">
+                        {{ option.label }}
+                    </option>
+                </FilterSelect>
+
+                <ActionGroup align="right" spacing="sm">
+                    <BaseButton
+                        v-if="sortConfig.field"
+                        variant="secondary"
+                        size="sm"
+                        data-test="clear-sort-btn"
+                        @click="clearSort"
+                    >
+                        Clear Sort
+                    </BaseButton>
+                    <BaseButton
+                        v-if="hasActiveFilters"
+                        variant="secondary"
+                        size="sm"
+                        data-test="clear-filters-btn"
+                        @click="clearFilters"
+                    >
+                        Clear Filters
+                    </BaseButton>
+                </ActionGroup>
+            </FilterBar>
+
+            <DataTable
+                :data="sortedAndFilteredTickets"
+                :sort-config="sortConfig"
+                data-test="ticket-list"
+                empty-title="No tickets found"
+                :empty-message="!tickets.length ? 'No tickets found.' : 'No tickets match your current filters.'"
+                :get-row-key="(ticket: Ticket) => ticket.id"
+                @sort="handleSort"
+            >
+                <template #header="{handleSort: sortHandler, getSortIcon}">
+                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-0">
+                        Ticket
+                    </th>
+                    <th
+                        class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap cursor-pointer hover:bg-gray-100 select-none w-24"
+                        @click="sortHandler('status')"
+                        data-test="sort-status-header"
+                    >
+                        Status {{ getSortIcon('status') }}
+                    </th>
+                    <th
+                        class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap cursor-pointer hover:bg-gray-100 select-none w-28"
+                        @click="sortHandler('category')"
+                        data-test="sort-category-header"
+                    >
+                        Category {{ getSortIcon('category') }}
+                    </th>
+                    <th
+                        v-if="isAdmin"
+                        class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap cursor-pointer hover:bg-gray-100 select-none w-24 hidden lg:table-cell"
+                        @click="sortHandler('creator')"
+                        data-test="sort-creator-header"
+                    >
+                        Creator {{ getSortIcon('creator') }}
+                    </th>
+                    <th
+                        class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap cursor-pointer hover:bg-gray-100 select-none w-28 hidden md:table-cell"
+                        @click="sortHandler('created_at')"
+                        data-test="sort-created-header"
+                    >
+                        Created {{ getSortIcon('created_at') }}
+                    </th>
+                    <th class="px-3 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider w-32">
+                        Actions
+                    </th>
+                </template>
+
+                <template #row="{item: ticket}">
+                    <td class="px-4 py-4">
+                        <div class="max-w-xs">
+                            <div class="text-sm font-medium text-gray-900 truncate">
+                                {{ ticket.title }}
+                            </div>
+                            <div class="text-sm text-gray-500 truncate">{{ ticket.content }}</div>
+                        </div>
+                    </td>
+                    <td class="px-3 py-4 whitespace-nowrap">
+                        <StatusBadge :variant="getStatusVariant(ticket.status)" data-test="ticket-status" size="sm">
+                            {{ getStatusText(ticket.status) }}
+                        </StatusBadge>
+                    </td>
+                    <td class="px-3 py-4 whitespace-nowrap">
+                        <StatusBadge variant="default" size="sm">
+                            {{ getCategoryName(ticket.category_id) }}
+                        </StatusBadge>
+                    </td>
+                    <td v-if="isAdmin" class="px-3 py-4 whitespace-nowrap text-sm text-gray-900 hidden lg:table-cell">
+                        {{ getUserName(ticket.user_id) }}
+                    </td>
+                    <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-500 hidden md:table-cell">
+                        {{ formatDate(ticket.created_at) }}
+                    </td>
+                    <td class="px-3 py-4 whitespace-nowrap text-right text-sm font-medium w-32">
+                        <div class="flex justify-end gap-1">
+                            <BaseButton
+                                variant="link"
+                                size="sm"
+                                data-test="view-ticket-btn"
+                                aria-label="View ticket details"
+                                @click="openModal('view', ticket)"
+                            >
+                                View
+                            </BaseButton>
+                            <BaseButton
+                                variant="link"
+                                size="sm"
+                                data-test="edit-ticket-btn"
+                                aria-label="Edit ticket"
+                                @click="openModal('edit', ticket)"
+                            >
+                                Edit
+                            </BaseButton>
+                            <BaseButton
+                                variant="link"
+                                size="sm"
+                                data-test="delete-ticket-btn"
+                                aria-label="Delete ticket"
+                                @click="handleDeleteTicket(ticket.id)"
+                            >
+                                Delete
+                            </BaseButton>
+                        </div>
+                    </td>
+                </template>
+            </DataTable>
+        </BaseCard>
+
+        <BaseModal :show="!!activeModal" :title="getModalTitle()" @close="closeModal">
+            <TicketCreateForm v-if="activeModal === 'create'" @close="closeModal" />
+            <TicketEditForm
+                v-else-if="activeModal === 'edit' && selectedTicket"
+                :ticket="selectedTicket"
+                @close="closeModal"
+            />
+            <TicketDetailView
+                v-else-if="activeModal === 'view' && selectedTicket"
+                :ticket="selectedTicket"
+                @close="closeModal"
+                @edit="handleEditFromDetail"
+            />
+        </BaseModal>
+    </PageContainer>
 </template>
 
 <script setup lang="ts">
@@ -253,22 +194,25 @@ import {categoryStore} from '../../Categories/store';
 import {userStore} from '../../Users/store';
 import {noteStore} from '../../Notes/store';
 import {replyStore} from '../../Replies/store';
-import type {
-    Ticket,
-    StatusClassMap,
-    StatusTextMap,
-    DateFormatOptions,
-    SortField,
-    SortConfig,
-    FilterConfig,
-} from '../types';
+import type {Ticket, StatusTextMap, DateFormatOptions, SortField, SortConfig, FilterConfig} from '../types';
 import {destroyErrors, destroyMessage} from '../../../services/error';
 import {isAdmin, loggedInUser} from '../../../services/auth';
 import ErrorMessage from '../../../components/ErrorMessage.vue';
+import {
+    PageContainer,
+    BaseCard,
+    BaseButton,
+    BaseModal,
+    StatusBadge,
+    FilterBar,
+    FilterInput,
+    FilterSelect,
+    ActionGroup,
+    DataTable,
+} from '../../../components/ui';
 import TicketCreateForm from './TicketCreateForm.vue';
 import TicketEditForm from './TicketEditForm.vue';
 import TicketDetailView from './TicketDetailView.vue';
-import Wrapper from '@/components/Wrapper.vue';
 
 const tickets = ticketStore.getters.all;
 const categories = categoryStore.getters.all;
@@ -404,13 +348,13 @@ if (isAdmin.value) {
     userStore.actions.getAll();
 }
 
-const getStatusClass = (status: string): string => {
-    const statusMap: StatusClassMap & Record<string, string> = {
-        '0': 'bg-gray-100 text-gray-800', // Closed
-        '1': 'bg-yellow-100 text-yellow-800', // Open
-        '2': 'bg-green-100 text-green-800', // In Progress
+const getStatusVariant = (status: string): 'default' | 'primary' | 'success' | 'warning' | 'danger' | 'info' => {
+    const variantMap: Record<string, 'default' | 'primary' | 'success' | 'warning' | 'danger' | 'info'> = {
+        '0': 'default', // Closed
+        '1': 'warning', // Open
+        '2': 'success', // In Progress
     };
-    return statusMap[status] || 'bg-gray-100 text-gray-800';
+    return variantMap[status] || 'default';
 };
 
 const getStatusText = (status: string): string => {
@@ -482,13 +426,6 @@ const handleSort = (field: SortField): void => {
         sortConfig.value.field = field;
         sortConfig.value.direction = 'asc';
     }
-};
-
-const getSortIcon = (field: SortField): string => {
-    if (sortConfig.value.field !== field) {
-        return '↕️';
-    }
-    return sortConfig.value.direction === 'asc' ? '↑' : '↓';
 };
 
 const hasActiveFilters = computed(() => {

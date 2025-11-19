@@ -14,54 +14,25 @@
 
                 <div class="flex items-center space-x-6">
                     <template v-if="!isAuthenticated">
-                        <router-link
-                            to="/login"
-                            class="text-blue-600 hover:underline transition-colors"
-                            role="link"
-                            data-test="navbar-login"
-                        >
-                            Login
-                        </router-link>
-                        <router-link
-                            to="/register"
-                            class="text-blue-600 hover:underline transition-colors"
-                            role="link"
-                            data-test="navbar-register"
-                        >
-                            Register
-                        </router-link>
+                        <NavLink to="/login" variant="primary" data-test="navbar-login">Login</NavLink>
+                        <NavLink to="/register" variant="primary" data-test="navbar-register">Register</NavLink>
                     </template>
 
                     <template v-else>
                         <span class="text-gray-700" data-test="navbar-welcome">Welcome, {{ loggedInUser?.name }}!</span>
 
                         <template v-if="isAdmin">
-                            <router-link
-                                to="/admin"
-                                class="text-purple-600 hover:underline font-semibold transition-colors"
-                                role="link"
-                                data-test="navbar-admin-dashboard"
-                            >
+                            <NavLink to="/admin" variant="admin" data-test="navbar-admin-dashboard">
                                 Admin Dashboard
-                            </router-link>
-                            <router-link
-                                to="/categories"
-                                class="text-purple-600 hover:underline transition-colors"
-                                role="link"
-                                data-test="navbar-admin-categories"
-                            >
+                            </NavLink>
+                            <NavLink to="/categories" variant="admin" data-test="navbar-admin-categories">
                                 Categories
-                            </router-link>
+                            </NavLink>
                         </template>
 
-                        <router-link
-                            to="/tickets"
-                            class="text-blue-600 hover:underline transition-colors"
-                            role="link"
-                            data-test="navbar-tickets"
-                        >
+                        <NavLink to="/tickets" variant="primary" data-test="navbar-tickets">
                             {{ isAdmin ? 'Tickets' : 'My Tickets' }}
-                        </router-link>
+                        </NavLink>
 
                         <LogoutButton />
                     </template>
@@ -73,5 +44,6 @@
 
 <script setup lang="ts">
 import {isAuthenticated, loggedInUser, isAdmin} from '../services/auth';
+import {NavLink} from './ui';
 import LogoutButton from './LogoutButton.vue';
 </script>
