@@ -1,14 +1,14 @@
 import PasswordRecovery from '../../resources/js/domains/Auth/pages/PasswordRecovery.vue';
-import { setMessage, setErrorBag, destroyErrors, destroyMessage } from '../../resources/js/services/error';
-import { mount, flushPromises } from '@vue/test-utils';
-import { vi } from 'vitest';
-import { sendPasswordResetLink } from '../../resources/js/services/auth';
+import {setMessage, setErrorBag, destroyErrors, destroyMessage} from '../../resources/js/services/error';
+import {mount, flushPromises} from '@vue/test-utils';
+import {vi} from 'vitest';
+import {sendPasswordResetLink} from '../../resources/js/services/auth';
 
 // Mock the auth service
 vi.mock('../../resources/js/services/auth', () => ({
-  sendPasswordResetLink: vi.fn(),
-  isAuthenticated: { value: false },
-  isAdmin: { value: false }
+    sendPasswordResetLink: vi.fn(),
+    isAuthenticated: {value: false},
+    isAdmin: {value: false},
 }));
 
 describe('PasswordRecovery UI', () => {
@@ -50,17 +50,16 @@ describe('PasswordRecovery UI', () => {
         // Act
         await flushPromises();
         // Assert
-        expect(wrapper.findComponent({ name: 'ErrorMessage' }).exists()).toBe(true);
+        expect(wrapper.findComponent({name: 'ErrorMessage'}).exists()).toBe(true);
     });
 
     it('renders FormError component when validation errors are present', async () => {
         // Arrange
-        setErrorBag({ email: ['The email field is required.'] });
+        setErrorBag({email: ['The email field is required.']});
         const wrapper = mount(PasswordRecovery);
         // Act
         await flushPromises();
         // Assert
-        expect(wrapper.findComponent({ name: 'FormError' }).exists()).toBe(true);
+        expect(wrapper.findComponent({name: 'FormError'}).exists()).toBe(true);
     });
-
 });
