@@ -1,4 +1,4 @@
-import { createApp } from 'vue';
+import {createApp} from 'vue';
 import App from './App.vue';
 import router from './router';
 
@@ -7,9 +7,9 @@ import router from './router';
  * Authentication state restoration is handled by the router guard
  */
 function initializeApp() {
-  const app = createApp(App);
-  app.use(router);
-  app.mount('#app');
+    const app = createApp(App);
+    app.use(router);
+    app.mount('#app');
 }
 
 // Start the application

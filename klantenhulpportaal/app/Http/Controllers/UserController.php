@@ -80,7 +80,11 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        $this->authorize('delete', $user);
+        $authUser = auth()->user();
+        // Only admins can delete users
+        if (!$authUser->is_admin) {
+            abort(403);
+        }
         $user->delete();
         return response()->json(null, 204);
     }

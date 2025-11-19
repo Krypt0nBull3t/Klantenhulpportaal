@@ -7,7 +7,7 @@ import {deleteRequest, getRequest, postRequest, putRequest} from '../http';
 /**
  * Creates a store module for the given module name.
  */
-// eslint-disable-next-line max-lines-per-function
+ 
 export const storeModuleFactory = <T extends {id: number}>(moduleName: string) => {
     const state: State<T> = ref({});
 

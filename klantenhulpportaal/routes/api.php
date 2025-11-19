@@ -3,6 +3,8 @@
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\TicketController;
+use App\Http\Controllers\NoteController;
+use App\Http\Controllers\ReplyController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -32,20 +34,25 @@ Route::middleware('auth:sanctum', 'web')->group(function () {
     Route::get('/categories/{category}', [CategoryController::class, 'show']);
     Route::put('/categories/{category}', [CategoryController::class, 'update']);
     Route::delete('/categories/{category}', [CategoryController::class, 'destroy']);
-
+    Route::post('/tickets', [TicketController::class, 'store']);
+    Route::get('/tickets', [TicketController::class, 'index']);
+    Route::get('/tickets/{ticket}', [TicketController::class, 'show']);
+    Route::put('/tickets/{ticket}', [TicketController::class, 'update']);
+    Route::delete('/tickets/{ticket}', [TicketController::class, 'destroy']);
+    Route::get('/notes', [NoteController::class, 'index']);
+    Route::post('/notes', [NoteController::class, 'store']);
+    Route::get('/notes/{note}', [NoteController::class, 'show']);
+    Route::put('/notes/{note}', [NoteController::class, 'update']);
+    Route::delete('/notes/{note}', [NoteController::class, 'destroy']);
+    Route::get('/replies', [ReplyController::class, 'index']);
+    Route::post('/replies', [ReplyController::class, 'store']);
+    Route::get('/replies/{reply}', [ReplyController::class, 'show']);
+    Route::put('/replies/{reply}', [ReplyController::class, 'update']);
+    Route::delete('/replies/{reply}', [ReplyController::class, 'destroy']);
     /**
      * User management endpoints (admin-only for listing all users).
      */
     Route::get('/users', [UserController::class, 'index']);
     Route::get('/users/{user}', [UserController::class, 'show']);
     Route::put('/users/{user}', [UserController::class, 'update']);
-});
-
-// Ticket management endpoints (authenticated users)
-Route::middleware('auth:sanctum', 'web')->group(function () {
-    Route::post('/tickets', [TicketController::class, 'store']);
-    Route::get('/tickets', [TicketController::class, 'index']);
-    Route::get('/tickets/{ticket}', [TicketController::class, 'show']);
-    Route::put('/tickets/{ticket}', [TicketController::class, 'update']);
-    Route::delete('/tickets/{ticket}', [TicketController::class, 'destroy']);
 });

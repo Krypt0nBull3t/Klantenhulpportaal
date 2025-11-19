@@ -1,11 +1,6 @@
-import type { RouteRecordRaw } from 'vue-router';
+import type {RouteRecordRaw} from 'vue-router';
+import CategoryOverview from './pages/CategoryOverview.vue';
 
-const CategoryOverview = () => import('./pages/CategoryOverview.vue');
-
-/**
- * @module categoryRoutes
- * @description Frontend routes for category management (admin-only)
- */
 export const categoryRoutes: RouteRecordRaw[] = [
     {
         path: '/categories',
@@ -14,7 +9,7 @@ export const categoryRoutes: RouteRecordRaw[] = [
         meta: {
             requiresAuth: true,
             requiresAdmin: true,
-            title: 'Categories Management'
-        }
-    }
+            title: 'Categories Management',
+        },
+    },
 ];

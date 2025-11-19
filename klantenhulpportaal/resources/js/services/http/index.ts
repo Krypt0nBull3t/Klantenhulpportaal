@@ -1,14 +1,13 @@
 import axios from 'axios';
-import { destroyErrors, destroyMessage } from '../../services/error';
-import { setErrorBag, setMessage } from '../../services/error';
-
+import {destroyErrors, destroyMessage} from '../../services/error';
+import {setErrorBag, setMessage} from '../../services/error';
 
 const http = axios.create({
     baseURL: '/api',
     headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
     },
-    withCredentials: true
+    withCredentials: true,
 });
 
 http.interceptors.request.use(
@@ -17,7 +16,7 @@ http.interceptors.request.use(
         destroyMessage(); // Wis oude "messages" voordat een nieuw verzoek wordt uitgevoerd
         return config;
     },
-    error => Promise.reject(error)
+    error => Promise.reject(error),
 );
 
 http.interceptors.response.use(
@@ -27,18 +26,17 @@ http.interceptors.response.use(
             setErrorBag(error.response.data.errors); // Sla validatiefouten op in de error bag
             setMessage(error.response.data.message); // Sla de algemene foutmelding op
         }
-        
+
         // Handle 401 Unauthorized silently - this is expected when checking auth status
         if (error.response && error.response.status === 401) {
             // Don't set error messages for authentication failures
             // This allows fetchUser() to fail gracefully during app initialization
-            return Promise.resolve({ data: null }); // Return empty response instead of throwing
+            return Promise.resolve({data: null}); // Return empty response instead of throwing
         }
-        
-        return Promise.reject(error);
-    }
-);
 
+        return Promise.reject(error);
+    },
+);
 
 export const getRequest = (endpoint: string) => http.get(endpoint);
 export const postRequest = (endpoint: string, data: unknown) => http.post(endpoint, data);

@@ -14,15 +14,18 @@ use App\Http\Resources\NoteResource;
 class NoteController extends Controller
 {
     /**
-     * Display a listing of notes for a ticket (admin-only).
+     * Display a listing of all notes (admin-only).
      * @function index
-     * @param int $ticketId
      * @returns \Illuminate\Http\Resources\Json\AnonymousResourceCollection<NoteResource>
      */
-    public function index($ticketId)
+    public function index()
     {
-        $this->authorize('viewAny', Note::class);
-        $notes = Note::where('ticket_id', $ticketId)->get();
+        $user = auth()->user();
+        if (!$user->is_admin) {
+            return response()->json([], 403);
+        }
+        
+        $notes = Note::all();
         return NoteResource::collection($notes);
     }
 
@@ -34,6 +37,11 @@ class NoteController extends Controller
      */
     public function store(StoreNoteRequest $request)
     {
+        $user = auth()->user();
+        if (!$user->is_admin) {
+            abort(403);
+        }
+        
         $data = $request->validated();
         $data['admin_id'] = auth()->id();
         $note = Note::create($data);
@@ -48,7 +56,10 @@ class NoteController extends Controller
      */
     public function show(Note $note)
     {
-        $this->authorize('view', $note);
+        $user = auth()->user();
+        if (!$user->is_admin) {
+            abort(403);
+        }
         return new NoteResource($note);
     }
 
@@ -61,7 +72,10 @@ class NoteController extends Controller
      */
     public function update(UpdateNoteRequest $request, Note $note)
     {
-        $this->authorize('update', $note);
+        $user = auth()->user();
+        if (!$user->is_admin) {
+            abort(403);
+        }
         $note->update($request->validated());
         return new NoteResource($note);
     }
@@ -74,7 +88,10 @@ class NoteController extends Controller
      */
     public function destroy(Note $note)
     {
-        $this->authorize('delete', $note);
+        $user = auth()->user();
+        if (!$user->is_admin) {
+            abort(403);
+        }
         $note->delete();
         return response()->json(null, 204);
     }

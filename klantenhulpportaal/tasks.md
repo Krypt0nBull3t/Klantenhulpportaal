@@ -175,12 +175,12 @@
 - ✅ Connect ticket creation form to backend
 - ✅ Create ticket edit form UI
 - ✅ Connect ticket edit form to backend
-- Show errors in UI
+- ✅ Show errors in UI
 
 ### Styling
 
-- Style ticket overview and detail pages with Tailwind
-- Style ticket forms
+- ✅ Style ticket overview and detail pages with Tailwind
+- ✅ Style ticket forms
 
 ---
 

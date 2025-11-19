@@ -38,10 +38,14 @@ class TicketController extends Controller
      */
     public function store(StoreTicketRequest $request)
     {
-        $data = $request->validated();
-        $data['user_id'] = auth()->id();
-        $data['status'] = $data['status'] ?? 1; // Default status: 1 (Open)
-        $ticket = Ticket::create($data);
+        $validated = $request->validated();
+
+        $validated['user_id'] = auth()->id();
+        
+        $validated['status'] = $validated['status'] ?? 1; // Default status: 1 (Open)
+        
+        $ticket = Ticket::create($validated);
+        
         return new TicketResource($ticket);
     }
 

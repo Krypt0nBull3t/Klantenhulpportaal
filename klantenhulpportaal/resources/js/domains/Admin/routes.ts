@@ -1,7 +1,5 @@
-import { type RouteRecordRaw } from 'vue-router';
-
-// Lazy load admin components for better performance
-const AdminDashboard = () => import('./pages/AdminDashboard.vue');
+import {type RouteRecordRaw} from 'vue-router';
+import AdminDashboard from './pages/AdminDashboard.vue';
 
 export const adminRoutes: RouteRecordRaw[] = [
     {
@@ -11,7 +9,7 @@ export const adminRoutes: RouteRecordRaw[] = [
         meta: {
             requiresAuth: true,
             requiresAdmin: true,
-            title: 'Admin Dashboard'
-        }
-    }
+            title: 'Admin Dashboard',
+        },
+    },
 ];

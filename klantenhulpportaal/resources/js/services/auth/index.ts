@@ -1,12 +1,12 @@
-import { postRequest, getRequest } from '../http';
-import { ref, computed } from 'vue';
-import type { User } from '../../types/auth';
-import type { LoginCredentials, RegistrationForm } from '../../domains/Auth/types';
+import {postRequest, getRequest} from '../http';
+import {ref, computed} from 'vue';
+import type {User} from '../../types/auth';
+import type {LoginCredentials, RegistrationForm} from '../../domains/Auth/types';
 
 const user = ref<User | null>(null);
 
 export const login = async (credentials: LoginCredentials) => {
-    const { data } = await postRequest('/login', credentials);
+    const {data} = await postRequest('/login', credentials);
     if (!data) return;
     user.value = data.user;
 };
@@ -18,10 +18,10 @@ export async function logout() {
 }
 
 export async function fetchUser() {
-    const { data } = await getRequest('/user');
+    const {data} = await getRequest('/user');
     if (!data) return;
     user.value = data as User;
-    return { data };
+    return {data};
 }
 
 export async function register(data: RegistrationForm) {
@@ -30,7 +30,7 @@ export async function register(data: RegistrationForm) {
 }
 
 export async function sendPasswordResetLink(email: string) {
-    const response = await postRequest('/password/email', { email });
+    const response = await postRequest('/password/email', {email});
     return response;
 }
 
@@ -42,4 +42,4 @@ export const loggedinUser = () => user.value;
 
 export const isAdmin = computed(() => user.value?.is_admin);
 
-export type { User };
+export type {User};
