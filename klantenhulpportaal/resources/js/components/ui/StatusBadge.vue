@@ -7,7 +7,7 @@
 <script setup lang="ts">
 import {computed} from 'vue';
 
-type BadgeVariant = 'default' | 'primary' | 'success' | 'warning' | 'danger' | 'info';
+export type BadgeVariant = 'default' | 'primary' | 'success' | 'warning' | 'danger' | 'info';
 type BadgeSize = 'sm' | 'md' | 'lg';
 
 interface Props {

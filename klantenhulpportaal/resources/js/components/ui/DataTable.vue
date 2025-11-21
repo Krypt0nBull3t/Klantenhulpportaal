@@ -10,7 +10,7 @@
             <slot v-if="$slots['empty-content']" name="empty-content" />
         </EmptyState>
 
-        <div v-else class="overflow-x-auto -mx-6">
+        <div v-else class="overflow-x-auto -mx">
             <div class="inline-block min-w-full py-2 align-middle">
                 <table :data-test="dataTest" class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gray-50">

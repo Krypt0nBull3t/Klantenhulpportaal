@@ -43,15 +43,6 @@
 
                 <ActionGroup align="right" spacing="sm">
                     <BaseButton
-                        v-if="sortConfig.field"
-                        variant="secondary"
-                        size="sm"
-                        data-test="clear-sort-btn"
-                        @click="clearSort"
-                    >
-                        Clear Sort
-                    </BaseButton>
-                    <BaseButton
                         v-if="hasActiveFilters"
                         variant="secondary"
                         size="sm"
@@ -105,7 +96,7 @@
                     >
                         Created {{ getSortIcon('created_at') }}
                     </th>
-                    <th class="px-3 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider w-32">
+                    <th class="px-3 py-3 text-middle text-xs font-medium text-gray-500 uppercase tracking-wider w-32">
                         Actions
                     </th>
                 </template>
@@ -188,15 +179,15 @@
 </template>
 
 <script setup lang="ts">
-import {ref, computed} from 'vue';
-import {ticketStore} from '../store';
-import {categoryStore} from '../../Categories/store';
-import {userStore} from '../../Users/store';
-import {noteStore} from '../../Notes/store';
-import {replyStore} from '../../Replies/store';
-import type {Ticket, StatusTextMap, DateFormatOptions, SortField, SortConfig, FilterConfig} from '../types';
-import {destroyErrors, destroyMessage} from '../../../services/error';
-import {isAdmin, loggedInUser} from '../../../services/auth';
+import { ref, computed } from 'vue';
+import { ticketStore } from '../store';
+import { categoryStore } from '../../Categories/store';
+import { userStore } from '../../Users/store';
+import { noteStore } from '../../Notes/store';
+import { replyStore } from '../../Replies/store';
+import type { Ticket, StatusTextMap, TicketStatus, DateFormatOptions, SortField, SortConfig, FilterConfig } from '../types';
+import { destroyErrors, destroyMessage } from '../../../services/error';
+import { isAdmin, loggedInUser } from '../../../services/auth';
 import ErrorMessage from '../../../components/ErrorMessage.vue';
 import {
     PageContainer,
@@ -210,6 +201,7 @@ import {
     ActionGroup,
     DataTable,
 } from '../../../components/ui';
+import type { BadgeVariant } from '../../../components/ui/StatusBadge.vue';
 import TicketCreateForm from './TicketCreateForm.vue';
 import TicketEditForm from './TicketEditForm.vue';
 import TicketDetailView from './TicketDetailView.vue';
@@ -218,13 +210,14 @@ const tickets = ticketStore.getters.all;
 const categories = categoryStore.getters.all;
 const users = userStore.getters.all;
 
-ticketStore.actions.getAll();
-categoryStore.actions.getAll();
-noteStore.actions.getAll();
-replyStore.actions.getAll();
-if (isAdmin.value) {
-    userStore.actions.getAll();
-}
+const initializeStores = () => {
+    ticketStore.actions.getAll();
+    categoryStore.actions.getAll();
+    noteStore.actions.getAll();
+    replyStore.actions.getAll();
+    if (isAdmin.value) userStore.actions.getAll();
+};
+initializeStores();
 
 const getCategoryName = (categoryId: number) => {
     const category = categories.value.find(cat => cat.id === categoryId);
@@ -241,131 +234,6 @@ const getUserName = (userId: number) => {
     return 'Unknown';
 };
 
-const activeModal = ref<'create' | 'edit' | 'view' | null>(null);
-const selectedTicket = ref<Ticket | null>(null);
-const sortConfig = ref<SortConfig>({
-    field: null,
-    direction: 'asc',
-});
-
-const filterConfig = ref<FilterConfig>({
-    status: '',
-    category: '',
-    creator: '',
-    title: '',
-});
-
-const statusOptions = computed(() => [
-    {value: '', label: 'All Statuses'},
-    {value: '0', label: 'Closed'},
-    {value: '1', label: 'Open'},
-    {value: '2', label: 'In Progress'},
-]);
-
-const categoryOptions = computed(() => {
-    const uniqueCategories = [
-        ...new Set(tickets.value.map(ticket => getCategoryName(ticket.category_id)).filter(name => name !== 'Unknown')),
-    ];
-    return [{value: '', label: 'All Categories'}, ...uniqueCategories.map(name => ({value: name, label: name}))];
-});
-
-const creatorOptions = computed(() => {
-    const uniqueCreators = [
-        ...new Set(tickets.value.map(ticket => getUserName(ticket.user_id)).filter(name => name !== 'Unknown')),
-    ];
-    return [{value: '', label: 'All Creators'}, ...uniqueCreators.map(name => ({value: name, label: name}))];
-});
-
-const filteredTickets = computed(() => {
-    let filtered = tickets.value;
-
-    if (filterConfig.value.title.trim()) {
-        const titleSearch = filterConfig.value.title.toLowerCase();
-        filtered = filtered.filter(
-            ticket =>
-                ticket.title.toLowerCase().includes(titleSearch) || ticket.content.toLowerCase().includes(titleSearch),
-        );
-    }
-
-    if (filterConfig.value.status) {
-        filtered = filtered.filter(ticket => String(ticket.status) === filterConfig.value.status);
-    }
-
-    if (filterConfig.value.category) {
-        filtered = filtered.filter(ticket => getCategoryName(ticket.category_id) === filterConfig.value.category);
-    }
-
-    if (filterConfig.value.creator && isAdmin.value) {
-        filtered = filtered.filter(ticket => getUserName(ticket.user_id) === filterConfig.value.creator);
-    }
-
-    return filtered;
-});
-
-const sortedAndFilteredTickets = computed(() => {
-    const ticketList = [...filteredTickets.value];
-
-    if (!sortConfig.value.field) {
-        return ticketList;
-    }
-
-    return ticketList.sort((a, b) => {
-        let aValue: string | number;
-        let bValue: string | number;
-
-        switch (sortConfig.value.field) {
-            case 'status':
-                aValue = parseInt(a.status);
-                bValue = parseInt(b.status);
-                break;
-            case 'category':
-                aValue = getCategoryName(a.category_id).toLowerCase();
-                bValue = getCategoryName(b.category_id).toLowerCase();
-                break;
-            case 'creator':
-                aValue = getUserName(a.user_id).toLowerCase();
-                bValue = getUserName(b.user_id).toLowerCase();
-                break;
-            case 'created_at':
-                aValue = new Date(a.created_at).getTime();
-                bValue = new Date(b.created_at).getTime();
-                break;
-            default:
-                return 0;
-        }
-
-        let comparison = 0;
-        if (aValue < bValue) comparison = -1;
-        if (aValue > bValue) comparison = 1;
-
-        return sortConfig.value.direction === 'desc' ? -comparison : comparison;
-    });
-});
-
-ticketStore.actions.getAll();
-categoryStore.actions.getAll();
-if (isAdmin.value) {
-    userStore.actions.getAll();
-}
-
-const getStatusVariant = (status: string): 'default' | 'primary' | 'success' | 'warning' | 'danger' | 'info' => {
-    const variantMap: Record<string, 'default' | 'primary' | 'success' | 'warning' | 'danger' | 'info'> = {
-        '0': 'default', // Closed
-        '1': 'warning', // Open
-        '2': 'success', // In Progress
-    };
-    return variantMap[status] || 'default';
-};
-
-const getStatusText = (status: string): string => {
-    const statusMap: StatusTextMap & Record<string, string> = {
-        '0': 'Closed',
-        '1': 'Open',
-        '2': 'In Progress',
-    };
-    return statusMap[status] || 'Unknown';
-};
-
 const formatDate = (dateString: string): string => {
     const options: DateFormatOptions = {
         year: 'numeric',
@@ -377,74 +245,150 @@ const formatDate = (dateString: string): string => {
     return new Date(dateString).toLocaleDateString('en-US', options);
 };
 
-const openModal = (type: 'create' | 'edit' | 'view', ticket?: Ticket): void => {
+const getStatusVariant = (status: string) => {
+    const variantMap: Record<string, BadgeVariant> = {
+        '0': 'default',
+        '1': 'warning',
+        '2': 'success',
+    };
+    return variantMap[status] ?? 'default';
+};
+
+const getStatusText = (status: string) => {
+    const statusMap: StatusTextMap = {
+        '0': 'Closed',
+        '1': 'Open',
+        '2': 'In Progress',
+    };
+    return statusMap[status as TicketStatus] ?? 'Unknown';
+};
+
+const makeOptions = (items: any[], getValue: (item: any) => string, label: string) => {
+    const unique = [...new Set(items.map(getValue).filter(v => v !== 'Unknown'))];
+    return [{ value: '', label }, ...unique.map(v => ({ value: v, label: v }))];
+};
+
+const statusOptions = computed(() => [
+    { value: '', label: 'All Statuses' },
+    { value: '0', label: 'Closed' },
+    { value: '1', label: 'Open' },
+    { value: '2', label: 'In Progress' },
+]);
+
+const categoryOptions = computed(() =>
+    makeOptions(tickets.value, t => getCategoryName(t.category_id), 'All Categories')
+);
+
+const creatorOptions = computed(() =>
+    makeOptions(tickets.value, t => getUserName(t.user_id), 'All Creators')
+);
+
+const filterConfig = ref<FilterConfig>({
+    status: '',
+    category: '',
+    creator: '',
+    title: '',
+});
+
+const applyFilters = (ticket: Ticket) => {
+    const { title, status, category, creator } = filterConfig.value;
+    if (title.trim() && ![ticket.title, ticket.content].some(text => text.toLowerCase().includes(title.toLowerCase())))
+        return false;
+    if (status && String(ticket.status) !== status) return false;
+    if (category && getCategoryName(ticket.category_id) !== category) return false;
+    if (creator && isAdmin.value && getUserName(ticket.user_id) !== creator) return false;
+    return true;
+};
+
+const filteredTickets = computed(() => tickets.value.filter(applyFilters));
+
+const sortConfig = ref<SortConfig>({
+    field: null,
+    direction: 'asc',
+});
+
+const getSortValue = (ticket: Ticket, field: string) => {
+    switch (field) {
+        case 'status': return parseInt(ticket.status);
+        case 'category': return getCategoryName(ticket.category_id).toLowerCase();
+        case 'creator': return getUserName(ticket.user_id).toLowerCase();
+        case 'created_at': return new Date(ticket.created_at).getTime();
+        default: return '';
+    }
+};
+
+const sortedAndFilteredTickets = computed(() => {
+    const { field, direction } = sortConfig.value;
+    const list = [...filteredTickets.value];
+    if (!field) return list;
+    return list.sort((a, b) => {
+        const aVal = getSortValue(a, field);
+        const bVal = getSortValue(b, field);
+        let cmp = 0;
+        if (aVal < bVal) cmp = -1;
+        if (aVal > bVal) cmp = 1;
+        return direction === 'desc' ? -cmp : cmp;
+    });
+});
+
+const activeModal = ref<'create' | 'edit' | 'view' | null>(null);
+const selectedTicket = ref<Ticket | null>(null);
+
+const openModal = (type: 'create' | 'edit' | 'view', ticket?: Ticket) => {
     if (type === 'view') {
         noteStore.actions.getAll();
         replyStore.actions.getAll();
     }
-
     activeModal.value = type;
     selectedTicket.value = ticket || null;
 };
 
-const closeModal = (): void => {
+const closeModal = () => {
     activeModal.value = null;
     selectedTicket.value = null;
     destroyErrors();
     destroyMessage();
 };
 
-const getModalTitle = (): string => {
+const getModalTitle = () => {
     switch (activeModal.value) {
-        case 'create':
-            return 'Create New Ticket';
-        case 'edit':
-            return 'Edit Ticket';
-        case 'view':
-            return 'Ticket Details';
-        default:
-            return '';
+        case 'create': return 'Create New Ticket';
+        case 'edit': return 'Edit Ticket';
+        case 'view': return 'Ticket Details';
+        default: return '';
     }
 };
 
-const handleEditFromDetail = (ticket: Ticket): void => {
+const handleEditFromDetail = (ticket: Ticket) => {
     selectedTicket.value = ticket;
     activeModal.value = 'edit';
 };
 
-const handleDeleteTicket = async (ticketId: number): Promise<void> => {
-    const confirmed: boolean = window.confirm('Are you sure you want to delete this ticket?');
-    if (confirmed) {
+const handleDeleteTicket = async (ticketId: number) => {
+    if (window.confirm('Are you sure you want to delete this ticket?')) {
         await ticketStore.actions.delete(ticketId);
     }
 };
 
-const handleSort = (field: SortField): void => {
+const handleSort = (field: string) => {
     if (sortConfig.value.field === field) {
-        sortConfig.value.direction = sortConfig.value.direction === 'asc' ? 'desc' : 'asc';
+        if (sortConfig.value.direction === 'asc') {
+            sortConfig.value.direction = 'desc';
+        } else if (sortConfig.value.direction === 'desc') {
+            sortConfig.value.field = null;
+            sortConfig.value.direction = 'asc';
+        }
     } else {
-        sortConfig.value.field = field;
+        sortConfig.value.field = field as SortField;
         sortConfig.value.direction = 'asc';
     }
 };
 
-const hasActiveFilters = computed(() => {
-    return !!(
-        filterConfig.value.title.trim() ||
-        filterConfig.value.status ||
-        filterConfig.value.category ||
-        filterConfig.value.creator
-    );
-});
+const hasActiveFilters = computed(() =>
+    Object.values(filterConfig.value).some(val => val && val.trim && val.trim())
+);
 
-const clearSort = (): void => {
-    sortConfig.value = {
-        field: null,
-        direction: 'asc',
-    };
-};
-
-const clearFilters = (): void => {
+const clearFilters = () => {
     filterConfig.value = {
         status: '',
         category: '',

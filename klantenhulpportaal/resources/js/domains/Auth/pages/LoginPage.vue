@@ -14,7 +14,6 @@
                     autocomplete="username"
                     data-test="login-email"
                     aria-label="Email"
-                    required
                 />
 
                 <FormInput
@@ -25,7 +24,6 @@
                     autocomplete="current-password"
                     data-test="login-password"
                     aria-label="Password"
-                    required
                 />
             </div>
 

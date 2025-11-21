@@ -42,7 +42,6 @@ A comprehensive form input component that handles text, email, password, textare
         name="email"
         label="Email Address"
         placeholder="Enter your email"
-        required
         data-test="email-input"
     />
 
@@ -52,7 +51,6 @@ A comprehensive form input component that handles text, email, password, textare
         name="category"
         label="Category"
         placeholder="Select a category"
-        required
     >
         <option value="1">Technical</option>
         <option value="2">Billing</option>
@@ -73,10 +71,9 @@ A comprehensive form input component that handles text, email, password, textare
 
 - `type`: 'text' | 'email' | 'password' | 'textarea' | 'select' | 'number'
 - `modelValue`: string | number
-- `name`: string (required)
+- `name`: string
 - `label`: string
 - `placeholder`: string
-- `required`: boolean
 - `autocomplete`: string
 - `dataTest`: string
 - `ariaLabel`: string
@@ -240,7 +237,7 @@ import {PageContainer, BaseButton, FormInput} from '@/components/ui';
 <template>
     <CenteredContainer>
         <form>
-            <FormInput v-model="email" type="email" name="email" label="Email" required />
+            <FormInput v-model="email" type="email" name="email" label="Email" />
 
             <BaseButton type="submit" full-width>Submit</BaseButton>
         </form>
