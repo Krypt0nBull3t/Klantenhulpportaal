@@ -13,3 +13,6 @@ export {default as EmptyState} from './EmptyState.vue';
 export {default as NavLink} from './NavLink.vue';
 export {default as ActionGroup} from './ActionGroup.vue';
 export {default as DataTable} from './DataTable.vue';
+export {default as InfoBlock} from './InfoBlock.vue';
+export {default as MessageBlock} from './MessageBlock.vue';
+export {default as CardSection} from './CardSection.vue';

@@ -1,3 +1,4 @@
+
 <template>
     <div data-test="ticket-detail-view" class="space-y-6">
         <ErrorMessage data-test="error-message" />
@@ -25,93 +26,79 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-                <h4 class="text-sm font-medium text-gray-900 mb-2">Created by</h4>
-                <p data-test="ticket-creator" class="text-sm text-gray-600">
-                    {{ getUserName(ticket.user_id) }}
-                </p>
-            </div>
-            <div>
-                <h4 class="text-sm font-medium text-gray-900 mb-2">Created on</h4>
-                <p data-test="ticket-created" class="text-sm text-gray-600">
-                    {{ formatDate(ticket.created_at) }}
-                </p>
-            </div>
-            <div v-if="ticket.assigned_to">
-                <h4 class="text-sm font-medium text-gray-900 mb-2">Assigned to</h4>
-                <p data-test="ticket-assigned" class="text-sm text-gray-600">
-                    {{ getUserName(ticket.assigned_to) }}
-                </p>
-            </div>
-            <div>
-                <h4 class="text-sm font-medium text-gray-900 mb-2">Last updated</h4>
-                <p data-test="ticket-updated" class="text-sm text-gray-600">
-                    {{ formatDate(ticket.updated_at) }}
-                </p>
-            </div>
+            <InfoBlock>
+                <template #label>Created by</template>
+                {{ getUserName(ticket.user_id) }}
+            </InfoBlock>
+            <InfoBlock>
+                <template #label>Created on</template>
+                {{ formatDate(ticket.created_at) }}
+            </InfoBlock>
+            <InfoBlock v-if="ticket.assigned_to">
+                <template #label>Assigned to</template>
+                {{ getUserName(ticket.assigned_to) }}
+            </InfoBlock>
+            <InfoBlock>
+                <template #label>Last updated</template>
+                {{ formatDate(ticket.updated_at) }}
+            </InfoBlock>
         </div>
 
-        <div>
+        <CardSection>
             <h4 class="text-sm font-medium text-gray-900 mb-2">Description</h4>
-            <div data-test="ticket-content" class="bg-gray-50 rounded-lg p-4">
-                <p class="text-sm text-gray-700 whitespace-pre-wrap">{{ ticket.content }}</p>
-            </div>
-        </div>
+            <p class="text-sm text-gray-700 whitespace-pre-wrap">{{ ticket.content }}</p>
+        </CardSection>
 
         <div v-if="ticketReplies.length > 0">
             <h4 class="text-sm font-medium text-gray-900 mb-3">Replies ({{ ticketReplies.length }})</h4>
             <div class="space-y-4">
-                <div
+                <MessageBlock
                     v-for="reply in ticketReplies"
                     :key="reply.id"
+                    type="reply"
                     data-test="ticket-reply"
-                    class="bg-blue-50 rounded-lg p-4 border-l-4 border-blue-400"
                 >
-                    <div class="flex items-center justify-between mb-2">
-                        <span class="text-sm font-medium text-gray-900">{{ getUserName(reply.user_id) }}</span>
-                        <span class="text-xs text-gray-500">{{ formatDate(reply.created_at) }}</span>
-                    </div>
-                    <p class="text-sm text-gray-700 whitespace-pre-wrap">{{ reply.content }}</p>
-                </div>
+                    <template #author>{{ getUserName(reply.user_id) }}</template>
+                    <template #date>{{ formatDate(reply.created_at) }}</template>
+                    {{ reply.content }}
+                </MessageBlock>
             </div>
         </div>
 
         <div v-if="isAdmin">
             <h4 class="text-sm font-medium text-gray-900 mb-3">Internal Notes</h4>
             <div v-if="ticketNotes.length > 0" class="space-y-4">
-                <div
+                <MessageBlock
                     v-for="note in ticketNotes"
                     :key="note.id"
+                    type="note"
                     data-test="ticket-note"
-                    class="bg-yellow-50 rounded-lg p-4 border-l-4 border-yellow-400"
                 >
-                    <div class="flex items-center justify-between mb-2">
-                        <span class="text-sm font-medium text-gray-900">{{ getUserName(note.admin_id) }}</span>
-                        <span class="text-xs text-gray-500">{{ formatDate(note.created_at) }}</span>
-                    </div>
-                    <p class="text-sm text-gray-700 whitespace-pre-wrap">{{ note.content }}</p>
-                </div>
+                    <template #author>{{ getUserName(note.admin_id) }}</template>
+                    <template #date>{{ formatDate(note.created_at) }}</template>
+                    {{ note.content }}
+                </MessageBlock>
             </div>
             <div v-else class="text-sm text-gray-500 italic">No internal notes for this ticket.</div>
         </div>
 
         <div class="flex justify-end space-x-3 pt-4 border-t border-gray-200">
-            <button
+            <BaseButton
                 type="button"
+                variant="secondary"
                 data-test="close-btn"
-                class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                 @click="emit('close')"
             >
                 Close
-            </button>
-            <button
+            </BaseButton>
+            <BaseButton
                 type="button"
+                variant="primary"
                 data-test="edit-btn"
-                class="px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                 @click="emit('edit', ticket)"
             >
                 Edit Ticket
-            </button>
+            </BaseButton>
         </div>
     </div>
 </template>
@@ -121,6 +108,7 @@ import {computed} from 'vue';
 import type {Ticket} from '../types';
 import type {StatusClassMap, StatusTextMap, DateFormatOptions} from '../types';
 import ErrorMessage from '../../../components/ErrorMessage.vue';
+import { CardSection, InfoBlock, MessageBlock, BaseButton } from '../../../components/ui';
 import {userStore} from '../../Users/store';
 import {categoryStore} from '../../Categories/store';
 import {noteStore} from '../../Notes/store';
