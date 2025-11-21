@@ -12,7 +12,7 @@
 
         <div v-else class="overflow-x-auto -mx">
             <div class="inline-block min-w-full py-2 align-middle">
-                <table :data-test="dataTest" class="min-w-full divide-y divide-gray-200">
+                <table :data-test="dataTest" class="divide-y divide-gray-200" style="table-layout: auto; width: max-content; min-width: 100%;">
                     <thead class="bg-gray-50">
                         <tr>
                             <slot name="header" :handleSort="handleSort" :getSortIcon="getSortIcon" />

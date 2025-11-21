@@ -64,78 +64,124 @@
                 @sort="handleSort"
             >
                 <template #header="{handleSort: sortHandler, getSortIcon}">
-                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider min-w-0">
-                        Ticket
+                    <th
+                        class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100 select-none relative overflow-hidden"
+                        :style="{ width: columnWidths.id + 'px', minWidth: columnWidths.id + 'px', maxWidth: columnWidths.id + 'px' }"
+                        data-test="sort-id-header"
+                    >
+                        <div @click="sortHandler('id')" class="truncate">ID {{ getSortIcon('id') }}</div>
+                        <div class="absolute right-0 top-0 bottom-0 w-2 cursor-col-resize hover:bg-blue-400 bg-gray-300 transition-colors" @mousedown="startResize($event, 'id')" style="z-index: 10;"></div>
+                    </th>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider relative overflow-hidden" :style="{ width: columnWidths.ticket + 'px', minWidth: columnWidths.ticket + 'px', maxWidth: columnWidths.ticket + 'px' }">
+                        <div class="truncate">Ticket</div>
+                        <div class="absolute right-0 top-0 bottom-0 w-2 cursor-col-resize hover:bg-blue-400 bg-gray-300 transition-colors" @mousedown="startResize($event, 'ticket')" style="z-index: 10;"></div>
                     </th>
                     <th
-                        class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap cursor-pointer hover:bg-gray-100 select-none w-24"
-                        @click="sortHandler('status')"
+                        class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap cursor-pointer hover:bg-gray-100 select-none relative overflow-hidden"
+                        :style="{ width: columnWidths.status + 'px', minWidth: columnWidths.status + 'px', maxWidth: columnWidths.status + 'px' }"
                         data-test="sort-status-header"
                     >
-                        Status {{ getSortIcon('status') }}
+                        <div @click="sortHandler('status')" class="truncate">Status {{ getSortIcon('status') }}</div>
+                        <div class="absolute right-0 top-0 bottom-0 w-2 cursor-col-resize hover:bg-blue-400 bg-gray-300 transition-colors" @mousedown="startResize($event, 'status')" style="z-index: 10;"></div>
                     </th>
                     <th
-                        class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap cursor-pointer hover:bg-gray-100 select-none w-28"
-                        @click="sortHandler('category')"
+                        class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap cursor-pointer hover:bg-gray-100 select-none relative overflow-hidden"
+                        :style="{ width: columnWidths.category + 'px', minWidth: columnWidths.category + 'px', maxWidth: columnWidths.category + 'px' }"
                         data-test="sort-category-header"
                     >
-                        Category {{ getSortIcon('category') }}
+                        <div @click="sortHandler('category')" class="truncate">Category {{ getSortIcon('category') }}</div>
+                        <div class="absolute right-0 top-0 bottom-0 w-2 cursor-col-resize hover:bg-blue-400 bg-gray-300 transition-colors" @mousedown="startResize($event, 'category')" style="z-index: 10;"></div>
                     </th>
                     <th
                         v-if="isAdmin"
-                        class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap cursor-pointer hover:bg-gray-100 select-none w-24 hidden lg:table-cell"
-                        @click="sortHandler('creator')"
+                        class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap cursor-pointer hover:bg-gray-100 select-none relative overflow-hidden hidden lg:table-cell"
+                        :style="{ width: columnWidths.creator + 'px', minWidth: columnWidths.creator + 'px', maxWidth: columnWidths.creator + 'px' }"
                         data-test="sort-creator-header"
                     >
-                        Creator {{ getSortIcon('creator') }}
+                        <div @click="sortHandler('creator')" class="truncate">Creator {{ getSortIcon('creator') }}</div>
+                        <div class="absolute right-0 top-0 bottom-0 w-2 cursor-col-resize hover:bg-blue-400 bg-gray-300 transition-colors" @mousedown="startResize($event, 'creator')" style="z-index: 10;"></div>
                     </th>
                     <th
-                        class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap cursor-pointer hover:bg-gray-100 select-none w-28 hidden md:table-cell"
-                        @click="sortHandler('created_at')"
+                        class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap cursor-pointer hover:bg-gray-100 select-none relative overflow-hidden hidden md:table-cell"
+                        :style="{ width: columnWidths.assigned_to + 'px', minWidth: columnWidths.assigned_to + 'px', maxWidth: columnWidths.assigned_to + 'px' }"
+                        data-test="sort-assigned-header"
+                    >
+                        <div @click="sortHandler('assigned_to')" class="truncate">Assigned To {{ getSortIcon('assigned_to') }}</div>
+                        <div class="absolute right-0 top-0 bottom-0 w-2 cursor-col-resize hover:bg-blue-400 bg-gray-300 transition-colors" @mousedown="startResize($event, 'assigned_to')" style="z-index: 10;"></div>
+                    </th>
+                    <th
+                        class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap cursor-pointer hover:bg-gray-100 select-none relative overflow-hidden hidden xl:table-cell"
+                        :style="{ width: columnWidths.created_at + 'px', minWidth: columnWidths.created_at + 'px', maxWidth: columnWidths.created_at + 'px' }"
                         data-test="sort-created-header"
                     >
-                        Created {{ getSortIcon('created_at') }}
+                        <div @click="sortHandler('created_at')" class="truncate">Created {{ getSortIcon('created_at') }}</div>
+                        <div class="absolute right-0 top-0 bottom-0 w-2 cursor-col-resize hover:bg-blue-400 bg-gray-300 transition-colors" @mousedown="startResize($event, 'created_at')" style="z-index: 10;"></div>
                     </th>
-                    <th class="px-3 py-3 text-middle text-xs font-medium text-gray-500 uppercase tracking-wider w-32">
-                        Actions
+                    <th
+                        class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap cursor-pointer hover:bg-gray-100 select-none relative overflow-hidden hidden xl:table-cell"
+                        :style="{ width: columnWidths.updated_at + 'px', minWidth: columnWidths.updated_at + 'px', maxWidth: columnWidths.updated_at + 'px' }"
+                        data-test="sort-updated-header"
+                    >
+                        <div @click="sortHandler('updated_at')" class="truncate">Updated {{ getSortIcon('updated_at') }}</div>
+                        <div class="absolute right-0 top-0 bottom-0 w-2 cursor-col-resize hover:bg-blue-400 bg-gray-300 transition-colors" @mousedown="startResize($event, 'updated_at')" style="z-index: 10;"></div>
+                    </th>
+                    <th class="px-3 py-3 text-middle text-xs font-medium text-gray-500 uppercase tracking-wider relative overflow-hidden" :style="{ width: columnWidths.actions + 'px', minWidth: columnWidths.actions + 'px', maxWidth: columnWidths.actions + 'px' }">
+                        <div class="truncate">Actions</div>
+                        <div class="absolute right-0 top-0 bottom-0 w-2 cursor-col-resize hover:bg-blue-400 bg-gray-300 transition-colors" @mousedown="startResize($event, 'actions')" style="z-index: 10;"></div>
                     </th>
                 </template>
 
                 <template #row="{item: ticket}">
-                    <td class="px-4 py-4">
-                        <div class="max-w-xs">
+                    <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-900 font-medium overflow-hidden" :style="{ minWidth: columnWidths.id + 'px', width: columnWidths.id + 'px', maxWidth: columnWidths.id + 'px' }">
+                        <div class="truncate">#{{ ticket.id }}</div>
+                    </td>
+                    <td class="px-4 py-4 overflow-hidden" :style="{ minWidth: columnWidths.ticket + 'px', width: columnWidths.ticket + 'px', maxWidth: columnWidths.ticket + 'px' }">
+                        <div style="max-width: 100%; overflow: hidden;">
                             <div class="text-sm font-medium text-gray-900 truncate">
                                 {{ ticket.title }}
                             </div>
                             <div class="text-sm text-gray-500 truncate">{{ ticket.content }}</div>
                         </div>
                     </td>
-                    <td class="px-3 py-4 whitespace-nowrap">
-                        <StatusBadge :variant="getStatusVariant(ticket.status)" data-test="ticket-status" size="sm">
-                            {{ getStatusText(ticket.status) }}
-                        </StatusBadge>
+                    <td class="px-3 py-4 whitespace-nowrap overflow-hidden" :style="{ minWidth: columnWidths.status + 'px', width: columnWidths.status + 'px', maxWidth: columnWidths.status + 'px' }">
+                        <div class="truncate">
+                            <StatusBadge :variant="getStatusVariant(ticket.status)" data-test="ticket-status" size="sm">
+                                {{ getStatusText(ticket.status) }}
+                            </StatusBadge>
+                        </div>
                     </td>
-                    <td class="px-3 py-4 whitespace-nowrap">
-                        <StatusBadge variant="default" size="sm">
-                            {{ getCategoryName(ticket.category_id) }}
-                        </StatusBadge>
+                    <td class="px-3 py-4 whitespace-nowrap overflow-hidden" :style="{ minWidth: columnWidths.category + 'px', width: columnWidths.category + 'px', maxWidth: columnWidths.category + 'px' }">
+                        <div class="truncate">
+                            <StatusBadge variant="default" size="sm">
+                                {{ getCategoryName(ticket.category_id) }}
+                            </StatusBadge>
+                        </div>
                     </td>
-                    <td v-if="isAdmin" class="px-3 py-4 whitespace-nowrap text-sm text-gray-900 hidden lg:table-cell">
-                        {{ getUserName(ticket.user_id) }}
+                    <td v-if="isAdmin" class="px-3 py-4 whitespace-nowrap text-sm text-gray-900 hidden lg:table-cell overflow-hidden" :style="{ minWidth: columnWidths.creator + 'px', width: columnWidths.creator + 'px', maxWidth: columnWidths.creator + 'px' }">
+                        <div class="truncate">{{ getUserName(ticket.user_id) }}</div>
                     </td>
-                    <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-500 hidden md:table-cell">
-                        {{ formatDate(ticket.created_at) }}
+                    <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-900 hidden md:table-cell overflow-hidden" :style="{ minWidth: columnWidths.assigned_to + 'px', width: columnWidths.assigned_to + 'px', maxWidth: columnWidths.assigned_to + 'px' }">
+                        <div class="truncate">{{ ticket.assigned_to ? getUserName(ticket.assigned_to) : '—' }}</div>
                     </td>
-                    <td class="px-3 py-4 whitespace-nowrap text-right text-sm font-medium w-32">
-                        <div class="flex justify-end gap-1">
+                    <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-500 hidden xl:table-cell overflow-hidden" :style="{ minWidth: columnWidths.created_at + 'px', width: columnWidths.created_at + 'px', maxWidth: columnWidths.created_at + 'px' }">
+                        <div class="truncate">{{ formatDate(ticket.created_at) }}</div>
+                    </td>
+                    <td class="px-3 py-4 whitespace-nowrap text-sm text-gray-500 hidden xl:table-cell overflow-hidden" :style="{ minWidth: columnWidths.updated_at + 'px', width: columnWidths.updated_at + 'px', maxWidth: columnWidths.updated_at + 'px' }">
+                        <div class="truncate">{{ formatDate(ticket.updated_at) }}</div>
+                    </td>
+                    <td class="px-2 py-4 whitespace-nowrap text-sm font-medium overflow-hidden" :style="{ width: columnWidths.actions + 'px', minWidth: columnWidths.actions + 'px', maxWidth: columnWidths.actions + 'px' }">
+                        <div class="flex justify-end items-center gap-0.5 w-full">
                             <BaseButton
                                 variant="link"
                                 size="sm"
                                 data-test="view-ticket-btn"
                                 aria-label="View ticket details"
                                 @click="openModal('view', ticket)"
+                                class="shrink-0"
+                                :class="columnWidths.actions < 140 ? 'px-1' : ''"
                             >
-                                View
+                                <span v-if="columnWidths.actions >= 140">View</span>
+                                <span v-else>👁️</span>
                             </BaseButton>
                             <BaseButton
                                 variant="link"
@@ -143,8 +189,11 @@
                                 data-test="edit-ticket-btn"
                                 aria-label="Edit ticket"
                                 @click="openModal('edit', ticket)"
+                                class="shrink-0"
+                                :class="columnWidths.actions < 140 ? 'px-1' : ''"
                             >
-                                Edit
+                                <span v-if="columnWidths.actions >= 140">Edit</span>
+                                <span v-else>✏️</span>
                             </BaseButton>
                             <BaseButton
                                 variant="link"
@@ -152,8 +201,11 @@
                                 data-test="delete-ticket-btn"
                                 aria-label="Delete ticket"
                                 @click="handleDeleteTicket(ticket.id)"
+                                class="shrink-0"
+                                :class="columnWidths.actions < 140 ? 'px-1' : ''"
                             >
-                                Delete
+                                <span v-if="columnWidths.actions >= 140">Delete</span>
+                                <span v-else>🗑️</span>
                             </BaseButton>
                         </div>
                     </td>
@@ -309,10 +361,13 @@ const sortConfig = ref<SortConfig>({
 
 const getSortValue = (ticket: Ticket, field: string) => {
     switch (field) {
+        case 'id': return ticket.id;
         case 'status': return parseInt(ticket.status);
         case 'category': return getCategoryName(ticket.category_id).toLowerCase();
         case 'creator': return getUserName(ticket.user_id).toLowerCase();
+        case 'assigned_to': return ticket.assigned_to ? getUserName(ticket.assigned_to).toLowerCase() : 'zzz';
         case 'created_at': return new Date(ticket.created_at).getTime();
+        case 'updated_at': return new Date(ticket.updated_at).getTime();
         default: return '';
     }
 };
@@ -395,5 +450,66 @@ const clearFilters = () => {
         creator: '',
         title: '',
     };
+};
+
+const columnWidths = ref({
+    id: 70,
+    ticket: 180,
+    status: 100,
+    category: 150,
+    creator: 120,
+    assigned_to: 140,
+    created_at: 160,
+    updated_at: 160,
+    actions: 140,
+});
+
+const resizing = ref<{
+    column: string | null;
+    startX: number;
+    startWidth: number;
+}>({
+    column: null,
+    startX: 0,
+    startWidth: 0,
+});
+
+const startResize = (event: MouseEvent, column: string) => {
+    event.preventDefault();
+    event.stopPropagation();
+    
+    resizing.value = {
+        column,
+        startX: event.pageX,
+        startWidth: columnWidths.value[column as keyof typeof columnWidths.value],
+    };
+    
+    document.addEventListener('mousemove', handleResize);
+    document.addEventListener('mouseup', stopResize);
+    document.body.style.cursor = 'col-resize';
+    document.body.style.userSelect = 'none';
+};
+
+const handleResize = (event: MouseEvent) => {
+    if (!resizing.value.column) return;
+    
+    const diff = event.pageX - resizing.value.startX;
+    let minWidth = 50;
+    
+    if (resizing.value.column === 'actions') {
+        minWidth = 80;
+    }
+    
+    const newWidth = Math.max(minWidth, resizing.value.startWidth + diff);
+    
+    columnWidths.value[resizing.value.column as keyof typeof columnWidths.value] = newWidth;
+};
+
+const stopResize = () => {
+    resizing.value.column = null;
+    document.removeEventListener('mousemove', handleResize);
+    document.removeEventListener('mouseup', stopResize);
+    document.body.style.cursor = '';
+    document.body.style.userSelect = '';
 };
 </script>

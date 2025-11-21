@@ -22,7 +22,7 @@ export interface DateFormatOptions {
     minute: 'numeric' | '2-digit';
 }
 
-export type SortField = 'status' | 'category' | 'creator' | 'created_at';
+export type SortField = 'id' | 'status' | 'category' | 'creator' | 'assigned_to' | 'created_at' | 'updated_at';
 export type SortDirection = 'asc' | 'desc';
 
 export interface SortConfig {
